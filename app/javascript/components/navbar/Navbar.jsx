@@ -31,6 +31,7 @@ import AddIcon from "@material-ui/icons/Add";
 import TocIcon from "@material-ui/icons/Toc";
 import { loggedInStatus } from "../../actions/index";
 import { store } from "../../packs/Index";
+import Logo from "../../../assets/images/logo.png";
 
 const drawerWidth = 240;
 
@@ -135,6 +136,13 @@ const useStyles = makeStyles(theme => ({
       color: "black",
       textDecoration: "none"
     }
+  },
+  logo: {
+    height: 40,
+    marginLeft: "22%",
+    [theme.breakpoints.up("sm")]: {
+      margin: "0 auto"
+    }
   }
 }));
 
@@ -176,9 +184,7 @@ export default function PersistentDrawerLeft(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" className={classes.title} noWrap>
-            {props.title}
-          </Typography>
+          <img src={Logo} className={classes.logo} alt="" />
         </Toolbar>
       </AppBar>
       <Drawer
