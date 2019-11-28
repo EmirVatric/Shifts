@@ -5,7 +5,27 @@ import $ from "jquery";
 import Popper from "popper.js";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import App from "../components/App";
+import { createStore, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+import rootReducer from "../reducers/rootReducer";
+import thunkMiddleware from "redux-thunk";
+import { loggedInStatus } from "../actions";
+
+export const store = createStore(
+  rootReducer,
+  compose(
+    applyMiddleware(thunkMiddleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__
+      ? window.__REDUX_DEVTOOLS_EXTENSION__()
+      : f => f
+  )
+);
 
 document.addEventListener("DOMContentLoaded", () => {
-  render(<App />, document.body.appendChild(document.createElement("div")));
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    document.body.appendChild(document.createElement("div"))
+  );
 });

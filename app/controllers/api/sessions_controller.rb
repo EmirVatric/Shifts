@@ -3,8 +3,8 @@ class Api::SessionsController < ApplicationController
 
   def create
     user = User
-            .find_by(email: params["user"]["email"])
-            .try(:authenticate, params["user"]["password"])
+            .find_by(email: params["session"]["email"])
+            .try(:authenticate, params["session"]["password"])
 
     if user
       session[:user_id] = user.id
@@ -14,7 +14,7 @@ class Api::SessionsController < ApplicationController
         user: user
       }
     else
-      render json: { status: 401 }
+      render json: { status: 401, errors:'Invalid credentials' }
     end
   end
 
@@ -26,7 +26,10 @@ class Api::SessionsController < ApplicationController
       }
     else
       render json: {
-        logged_in: false
+        logged_in: false,
+        user: {
+          name: ''
+        }
       }
     end
   end

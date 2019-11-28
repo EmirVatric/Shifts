@@ -19,19 +19,38 @@ import ListItemText from "@material-ui/core/ListItemText";
 import HomeIcon from "@material-ui/icons/Home";
 import PersonIcon from "@material-ui/icons/Person";
 import BookIcon from "@material-ui/icons/Book";
-import InputBase from "@material-ui/core/InputBase";
-import SearchIcon from "@material-ui/icons/Search";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
 import AddIcon from "@material-ui/icons/Add";
 import TocIcon from "@material-ui/icons/Toc";
+import { loggedInStatus } from "../../actions/index";
+import { store } from "../../packs/Index";
 
 const drawerWidth = 240;
+
+const logout = () => {
+  const url = "/api/logout";
+  fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("Network response was not ok!");
+    })
+    .then(response => store.dispatch(loggedInStatus()))
+    .catch(e => console.log(e));
+};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -108,12 +127,21 @@ const useStyles = makeStyles(theme => ({
   },
   customizeToolbar: {
     height: 70
+  },
+  link: {
+    textDecoration: "none",
+    color: "black",
+    "&:active": {
+      color: "black",
+      textDecoration: "none"
+    }
   }
 }));
 
 export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
+  const loggedIn = useSelector(state => state.loggedIn);
   const [open, setOpen] = React.useState(false);
   const [openBooks, setOpenBooks] = React.useState(false);
 
@@ -173,12 +201,14 @@ export default function PersistentDrawerLeft(props) {
         </div>
         <Divider />
         <List>
-          <ListItem button component="a" href="/">
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
+          <Link to="/" onClick={handleDrawerClose} className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
+          </Link>
           <ListItem button onClick={handleBooksOpen}>
             <ListItemIcon>
               <BookIcon />
@@ -221,14 +251,54 @@ export default function PersistentDrawerLeft(props) {
           </ListItem>
         </List>
         <Divider />
-        <List>
-          <ListItem button component="a" href="/users/new">
-            <ListItemIcon>
-              <VpnKeyIcon />
-            </ListItemIcon>
-            <ListItemText primary="Sign Up" />
-          </ListItem>
-        </List>
+        {loggedIn ? (
+          <List>
+            <Link
+              to="/login"
+              onClick={handleDrawerClose}
+              className={classes.link}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <LockOpenIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Logout"
+                  onClick={() => {
+                    logout();
+                  }}
+                />
+              </ListItem>
+            </Link>{" "}
+          </List>
+        ) : (
+          <List>
+            <Link
+              to="/login"
+              onClick={handleDrawerClose}
+              className={classes.link}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <LockOpenIcon />
+                </ListItemIcon>
+                <ListItemText primary="Login" />
+              </ListItem>
+            </Link>
+            <Link
+              to="/signup"
+              onClick={handleDrawerClose}
+              className={classes.link}
+            >
+              <ListItem button>
+                <ListItemIcon>
+                  <VpnKeyIcon />
+                </ListItemIcon>
+                <ListItemText primary="Sign Up" />
+              </ListItem>
+            </Link>
+          </List>
+        )}
       </Drawer>
       <main
         className={clsx(classes.content, {

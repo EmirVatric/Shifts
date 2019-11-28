@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./login.css";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -10,19 +11,31 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import { loggedInStatus } from "../../actions";
+import { connect } from "react-redux";
+import { compose } from "redux";
+
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
-      password: ""
+      password: "",
+      error: ""
     };
   }
 
   handleChange(event) {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
+    if (this.state.error.length > 0) {
+      this.setState({
+        [event.target.id]: event.target.value,
+        error: ""
+      });
+    } else {
+      this.setState({
+        [event.target.id]: event.target.value
+      });
+    }
   }
 
   handleSumbit(e) {
@@ -34,7 +47,7 @@ class Login extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        user: this.state
+        session: this.state
       })
     })
       .then(response => {
@@ -43,9 +56,16 @@ class Login extends Component {
         }
       })
       .then(response => {
-        console.log(response);
+        if (response.status == 401) {
+          this.setState({
+            error: response.errors
+          });
+        } else if (response.status == "created") {
+          this.props.loggedIn();
+          this.props.history.push("/");
+        }
       })
-      .catch(e => this.props.history.push("/"));
+      .catch(e => console.log(e));
   }
 
   render() {
@@ -62,6 +82,8 @@ class Login extends Component {
             </Typography>
             <form className="form" noValidate>
               <TextField
+                error={this.state.error.length > 0 ? true : false}
+                helperText={this.state.error}
                 variant="outlined"
                 margin="normal"
                 required
@@ -74,6 +96,8 @@ class Login extends Component {
                 autoFocus
               />
               <TextField
+                error={this.state.error.length > 0 ? true : false}
+                helperText={this.state.error}
                 variant="outlined"
                 margin="normal"
                 required
@@ -96,6 +120,9 @@ class Login extends Component {
                 Sign In
               </Button>
             </form>
+            <Link from="/login" to="/signup" className="mt-4 w-100">
+              Sign Up
+            </Link>
           </div>
         </Container>
       </div>
@@ -103,4 +130,12 @@ class Login extends Component {
   }
 }
 
-export default withRouter(Login);
+const mapDispatchToProps = dispatch => {
+  return {
+    loggedIn: () => {
+      dispatch(loggedInStatus());
+    }
+  };
+};
+
+export default compose(withRouter, connect(null, mapDispatchToProps))(Login);
