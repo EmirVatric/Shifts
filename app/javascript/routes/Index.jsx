@@ -6,6 +6,8 @@ import Login from "../components/sessions/Login";
 import Signup from "../components/sessions/Register";
 import CreateTask from "../components/tasks/create";
 import Tasks from "../components/tasks/index";
+import ShowTask from "../components/tasks/show";
+import PrivateRoute from "../middleware/PrivateRoute";
 
 export default (
   <Router>
@@ -37,12 +39,13 @@ export default (
           </Navbar>
         )}
       />
+      <PrivateRoute path="/tasks" exact component={<Tasks />} />
       <Route
-        path="/tasks"
+        path="/task/:id"
         exact
-        render={() => (
-          <Navbar title="All Tasks">
-            <Tasks />
+        render={({ match, history }) => (
+          <Navbar title="Specific Task">
+            <ShowTask match={match} history={history} />
           </Navbar>
         )}
       />

@@ -1,4 +1,7 @@
 class Api::TasksController < ApplicationController
+  include CurrentUserConcern  
+
+
   def create
     task = Task.new(task_params)
 
@@ -16,6 +19,22 @@ class Api::TasksController < ApplicationController
   end
 
   def update
+  end
+
+  def show
+    begin
+      task = Task.find(params[:id])
+
+      render json: {
+        status: 200,
+        task: task
+      }
+    rescue StandardError => msg 
+      render json: {
+        status: 404,
+        errors: 'This task does not exists!'
+      }
+    end
   end
 
   def index

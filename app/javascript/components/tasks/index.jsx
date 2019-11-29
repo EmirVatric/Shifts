@@ -4,13 +4,12 @@ import Typography from "@material-ui/core/Typography";
 import "./index.css";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import { Link } from "react-router-dom";
 
-import PropTypes from "prop-types";
-import { makeStyles, withStyles, useTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Box from "@material-ui/core/Box";
 
 const classes = theme => ({
   root: {
@@ -80,73 +79,77 @@ class Tasks extends Component {
         {this.state.value == 0 ? (
           <div className="mt-3">
             {this.state.completedTasks.map(task => (
-              <Paper className="wrapperTask row mb-3" key={task.id}>
-                <div className="col-11 pt-3 pb-3">
-                  <Typography
-                    variant="h6"
-                    component="h6"
-                    className="text-center"
-                  >
-                    {task.title}
-                  </Typography>
-                  <Typography
-                    component="h5"
-                    variant="caption"
-                    className="text-center d-flex align-items-center justify-content-center"
-                    noWrap
-                  >
-                    <AccessTimeIcon className="mr-2 " />
-                    {new Date(task.start_time).toLocaleDateString(
-                      "en-US",
-                      options
-                    )}{" "}
-                    -{" "}
-                    {new Date(task.end_time).toLocaleDateString(
-                      "en-US",
-                      options
-                    )}
-                  </Typography>
-                </div>
-                <div className="col-1 arrowTask">
-                  <ArrowForwardIosIcon />
-                </div>
-              </Paper>
+              <Link from="/tasks" to={`/task/${task.id}`} key={task.id}>
+                <Paper className="wrapperTask row mb-3">
+                  <div className="col-11 pt-3 pb-3">
+                    <Typography
+                      variant="h6"
+                      component="h6"
+                      className="text-center"
+                    >
+                      {task.title}
+                    </Typography>
+                    <Typography
+                      component="h5"
+                      variant="caption"
+                      className="text-center d-flex align-items-center justify-content-center"
+                      noWrap
+                    >
+                      <AccessTimeIcon className="mr-2 " />
+                      {new Date(task.start_time).toLocaleDateString(
+                        "en-US",
+                        options
+                      )}{" "}
+                      -{" "}
+                      {new Date(task.end_time).toLocaleDateString(
+                        "en-US",
+                        options
+                      )}
+                    </Typography>
+                  </div>
+                  <div className="col-1 arrowTask">
+                    <ArrowForwardIosIcon />
+                  </div>
+                </Paper>
+              </Link>
             ))}
           </div>
         ) : (
           <div className="mt-3">
             {this.state.pendingTasks.map(task => (
-              <Paper className="wrapperTask row mb-3" key={task.id}>
-                <div className="col-11 pt-3 pb-3">
-                  <Typography
-                    variant="h6"
-                    component="h6"
-                    className="text-center"
-                  >
-                    {task.title}
-                  </Typography>
-                  <Typography
-                    component="h5"
-                    variant="caption"
-                    className="text-center d-flex align-items-center justify-content-center"
-                    noWrap
-                  >
-                    <AccessTimeIcon className="mr-2 " />
-                    {new Date(task.start_time).toLocaleDateString(
-                      "en-US",
-                      options
-                    )}{" "}
-                    -{" "}
-                    {new Date(task.end_time).toLocaleDateString(
-                      "en-US",
-                      options
-                    )}
-                  </Typography>
-                </div>
-                <div className="col-1 arrowTask">
-                  <ArrowForwardIosIcon />
-                </div>
-              </Paper>
+              <Link from="/tasks" to={`/task/${task.id}`} key={task.id}>
+                <Paper className="wrapperTask row mb-3">
+                  <div className="col-11 pt-3 pb-3">
+                    <Typography
+                      variant="h6"
+                      component="h6"
+                      className="text-center"
+                    >
+                      {task.title}
+                    </Typography>
+                    <Typography
+                      component="h5"
+                      variant="caption"
+                      className="text-center d-flex align-items-center justify-content-center"
+                      noWrap
+                    >
+                      <AccessTimeIcon className="mr-2 " />
+                      {new Date(task.start_time).toLocaleDateString(
+                        "en-US",
+                        options
+                      )}{" "}
+                      -{" "}
+                      {new Date(task.end_time).toLocaleDateString(
+                        "en-US",
+                        options
+                      )}
+                    </Typography>
+                  </div>
+                  <div className="col-1 arrowTask">
+                    <ArrowForwardIosIcon />
+                  </div>
+                </Paper>
+              </Link>
             ))}
           </div>
         )}

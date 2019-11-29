@@ -9,7 +9,6 @@ import { createStore, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "../reducers/rootReducer";
 import thunkMiddleware from "redux-thunk";
-import { loggedInStatus } from "../actions";
 
 export const store = createStore(
   rootReducer,

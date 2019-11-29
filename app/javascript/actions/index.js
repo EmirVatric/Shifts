@@ -19,7 +19,7 @@ export function loggedInStatus() {
         error => console.log('An error occurred.', error)
       )
       .then(response => {
-        dispatch(receiveStatus(response.logged_in, response.user.name))
+        return dispatch(receiveStatus(response.logged_in, response.user.name))
       })
   }
 }
