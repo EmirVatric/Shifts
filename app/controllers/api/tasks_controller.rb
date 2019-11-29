@@ -19,8 +19,8 @@ class Api::TasksController < ApplicationController
   end
 
   def index
-    completed_tasks = Task.where(status: true)
-    pending_tasks = Task.where(status: false)
+    completed_tasks = Task.where("end_time <= ?", Time.now).order('end_time DESC')
+    pending_tasks = Task.where("end_time > ?", Time.now).order('start_time ASC')
 
     render json: {
       status: 200,
