@@ -219,7 +219,7 @@ export default function PersistentDrawerLeft(props) {
             <ListItemIcon>
               <BookIcon />
             </ListItemIcon>
-            <ListItemText primary="Books" />
+            <ListItemText primary="Tasks" />
             {openBooks ? <ExpandLess /> : <ExpandMore />}
           </ListItem>
           <Collapse in={openBooks} timeout="auto" unmountOnExit>
@@ -230,23 +230,30 @@ export default function PersistentDrawerLeft(props) {
                 </ListItemIcon>
                 <ListItemText primary="Favorite Books" />
               </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TocIcon />
-                </ListItemIcon>
-                <ListItemText primary="Published Books" />
-              </ListItem>
-              <ListItem
-                button
-                className={classes.nested}
-                component="a"
-                href="/books/new"
+              <Link
+                to="/tasks"
+                onClick={handleDrawerClose}
+                className={classes.link}
               >
-                <ListItemIcon>
-                  <AddIcon />
-                </ListItemIcon>
-                <ListItemText primary="Publish a Book" />
-              </ListItem>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <TocIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="All Tasks" />
+                </ListItem>
+              </Link>
+              <Link
+                to="/task/create"
+                onClick={handleDrawerClose}
+                className={classes.link}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <AddIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Create Tasks" />
+                </ListItem>
+              </Link>
             </List>
           </Collapse>
           <ListItem button>
