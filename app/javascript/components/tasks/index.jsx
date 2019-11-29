@@ -1,10 +1,14 @@
 import React, { Component } from "react";
+import { withRouter, Redirect } from "react-router";
+import { compose } from "redux";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import "./index.css";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { loggedInStatus } from "../../actions/index";
 
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -24,7 +28,8 @@ class Tasks extends Component {
     this.state = {
       value: 0,
       completedTasks: [],
-      pendingTasks: []
+      pendingTasks: [],
+      redirect: false
     };
   }
 
@@ -32,9 +37,13 @@ class Tasks extends Component {
     this.setState({ value });
   };
 
-  handleChangeIndex() {}
-
   componentDidMount() {
+    this.props.loggedIn().then(res => {
+      this.setState({
+        redirect: !res.loggedIn
+      });
+    });
+
     const url = "/api/tasks";
     fetch(url)
       .then(response => {
@@ -52,6 +61,7 @@ class Tasks extends Component {
   }
 
   render() {
+    if (this.state.redirect) return <Redirect to="/login" />;
     const options = {
       month: "short",
       day: "numeric",
@@ -158,4 +168,16 @@ class Tasks extends Component {
   }
 }
 
-export default withStyles(classes)(Tasks);
+const mapDispatchToProps = dispatch => {
+  return {
+    loggedIn: () => {
+      return dispatch(loggedInStatus());
+    }
+  };
+};
+
+export default compose(
+  withStyles(classes),
+  withRouter,
+  connect(null, mapDispatchToProps)
+)(Tasks);

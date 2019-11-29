@@ -39,7 +39,15 @@ export default (
           </Navbar>
         )}
       />
-      <PrivateRoute path="/tasks" exact component={<Tasks />} />
+      <Route
+        path="/tasks"
+        exact
+        render={() => (
+          <Navbar title="Create Task">
+            <Tasks />
+          </Navbar>
+        )}
+      />
       <Route
         path="/task/:id"
         exact
