@@ -1,0 +1,92 @@
+.singleTaskHeader {
+  border-radius: 5px;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+}
+
+.singleTaskSubtextWrapper {
+  width: 100%;
+  height: 60px;
+  background: white;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.borderTopRadius {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border-bottom: 1px solid #4154B3;
+}
+
+.borderBottomRadius {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.singleTaskTimeAvarat {
+  color: #4154B3;
+  height: 35px !important;
+  width: 35px !important;
+}
+
+.dateTimeWrapperSingleTask {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.dateTimeHeader {
+  font-size: 11px;
+  color: #4154B3;
+}
+
+.dateTimeSingleTask {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.singleTaskTitle {
+  margin-left: 10px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.addThisTaskToTimeline {
+  height: 50px;
+  background: #4154B3;
+  display: flex;
+  color: white;
+  align-items: center;
+  padding: 0 14px;
+  font-weight: 600;
+  font-size: 12px;
+  justify-content: space-between;
+}
+
+.singleTaskDescription {
+  padding: 10px 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+}
+
+.singleTaskDescriptionTitle {
+  font-size: 13px;
+  color: #4154B3;
+}
+
+.singleTaskDescriptionUser {
+  display: flex;
+  padding: 10px 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  align-items: center;
+}

@@ -2,6 +2,10 @@ class Task < ApplicationRecord
   before_save :status_value
   before_validation :time_difference
 
+  belongs_to :creator, class_name: "User", foreign_key: "creator_id"
+  has_many :managers
+  has_many :assignees, through: :managers, source: 'user'
+
   validates :title, presence: true
   validates :description, presence: true,length: {minimum:10, maximum:200}
   validates :start_time, presence: true

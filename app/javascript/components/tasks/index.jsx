@@ -42,22 +42,23 @@ class Tasks extends Component {
       this.setState({
         redirect: !res.loggedIn
       });
+      if (res.loggedIn) {
+        const url = "/api/tasks";
+        fetch(url)
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            }
+          })
+          .then(response => {
+            this.setState({
+              completedTasks: response.completedTasks,
+              pendingTasks: response.pendingTasks
+            });
+          })
+          .catch(e => console.log(e));
+      }
     });
-
-    const url = "/api/tasks";
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        this.setState({
-          completedTasks: response.completedTasks,
-          pendingTasks: response.pendingTasks
-        });
-      })
-      .catch(e => console.log(e));
   }
 
   render() {

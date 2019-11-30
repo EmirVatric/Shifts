@@ -7,7 +7,6 @@ import Signup from "../components/sessions/Register";
 import CreateTask from "../components/tasks/create";
 import Tasks from "../components/tasks/index";
 import ShowTask from "../components/tasks/show";
-import PrivateRoute from "../middleware/PrivateRoute";
 
 export default (
   <Router>

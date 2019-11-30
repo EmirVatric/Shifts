@@ -2,7 +2,8 @@ Rails.application.routes.draw do
   namespace :api do
     resources :sessions, only: [:create]
     resources :registrations, only: [:create]
-    resources :tasks, only: [:create, :index, :update,:show, :destroy]
+    resources :tasks, only: [:create, :index, :update, :show, :destroy]
+    post :assignment, to: 'tasks#assignment'
     delete :logout, to: "sessions#logout"
     get :logged_in, to: "sessions#logged_in"
   end
