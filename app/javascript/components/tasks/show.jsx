@@ -19,7 +19,8 @@ class ShowTask extends Component {
       redirect: false,
       task: "",
       creator: "",
-      assignees: []
+      assignees: [],
+      errors: []
     };
   }
 
@@ -41,6 +42,7 @@ class ShowTask extends Component {
         throw new Error("Network response was not ok!");
       })
       .then(response => {
+        console.log(response);
         this.setState({
           assignees: response.assignees
         });

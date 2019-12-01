@@ -25,6 +25,8 @@ class Api::TasksController < ApplicationController
       task = Task.find(params[:id])
       user = @current_user
 
+      raise 'This user has already been assigned to this task!' if Manager.where(user_id: user.id, task_id: task.id).exists?
+
       user.assigned_tasks << task
       render json: {
         status: 200,
@@ -33,7 +35,8 @@ class Api::TasksController < ApplicationController
     rescue StandardError => msg 
       render json: {
         status: 404,
-        errors: 'This task does not exists!'
+        errors: msg,
+        assignees: task.assignees
       }
     end
   end
