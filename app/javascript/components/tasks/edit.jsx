@@ -27,7 +27,10 @@ class EditTask extends Component {
       DateErrors: "",
       start_time: new Date(),
       end_time: new Date(),
-      redirect: false
+      redirect: false,
+      TitleErrors: "",
+      DescriptionErrors: "",
+      DateErrors: ""
     };
   }
 
@@ -87,6 +90,43 @@ class EditTask extends Component {
     this.setState({
       end_time: event
     });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const url = `/api/tasks/${this.props.location.state.task.id}`;
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        task: this.state
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(response => {
+        if (response.status == 500) {
+          response.errors.forEach(error => {
+            if (error.split(" ")[1] == "time") {
+              this.setState({
+                DateErrors: error
+              });
+            } else {
+              this.setState({
+                [error.split(" ")[0] + "Errors"]: error
+              });
+            }
+          });
+        } else if (response.status == 200) {
+          this.props.history.push(`/task/${this.props.location.state.task.id}`);
+        }
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -169,7 +209,7 @@ class EditTask extends Component {
                 variant="contained"
                 color="primary"
                 className="submit"
-                onClick={e => this.handleSumbit(e)}
+                onClick={e => this.handleSubmit(e)}
               >
                 Submit Changes
               </Button>

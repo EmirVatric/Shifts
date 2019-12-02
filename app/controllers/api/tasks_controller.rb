@@ -63,6 +63,28 @@ class Api::TasksController < ApplicationController
   end
 
   def update
+    begin
+      task = Task.find(params[:id])
+      raise 'You have to bee logged in to edit tasks!' if !logged_in?
+      raise 'You have to be creator of the task to edit it!' if task.creator_id != @current_user.id
+
+      if task.update_attributes(task_params)
+        render json: {
+          status: 200,
+          task: task
+        }
+      else
+        render json: { 
+          status: 500,
+          errors: task.errors.full_messages 
+        }
+      end
+    rescue StandardError => msg
+      render json: {
+        status: 401,
+        errors: msg
+      }
+    end
   end
 
   def show
