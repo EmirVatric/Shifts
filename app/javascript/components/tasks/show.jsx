@@ -11,6 +11,8 @@ import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import TocIcon from "@material-ui/icons/Toc";
 import AddIcon from "@material-ui/icons/Add";
 import PersonIcon from "@material-ui/icons/Person";
+import EditIcon from "@material-ui/icons/Edit";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 class ShowTask extends Component {
   constructor(props) {
@@ -20,7 +22,9 @@ class ShowTask extends Component {
       task: "",
       creator: "",
       assignees: [],
-      errors: []
+      errors: [],
+      user: {},
+      redirect: false
     };
   }
 
@@ -42,9 +46,34 @@ class ShowTask extends Component {
         throw new Error("Network response was not ok!");
       })
       .then(response => {
-        console.log(response);
         this.setState({
           assignees: response.assignees
+        });
+      })
+      .catch(e => console.log(e));
+  }
+
+  removeTask() {
+    let url = `/api/assignment`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: this.state.task.id
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok!");
+      })
+      .then(response => {
+        this.setState({
+          assignees: response.assignees,
+          user: response.user
         });
       })
       .catch(e => console.log(e));
@@ -74,11 +103,23 @@ class ShowTask extends Component {
           this.setState({
             task: response.task,
             creator: response.creator,
-            assignees: response.assignees
+            assignees: response.assignees,
+            user: response.user
           });
         })
         .catch(e => console.log(e));
     });
+  }
+
+  ifAssigned() {
+    let result = false;
+    this.state.assignees.forEach(user => {
+      if (user.id === this.state.user.id) {
+        result = true;
+      }
+    });
+
+    return result;
   }
   render() {
     const options = {
@@ -88,6 +129,8 @@ class ShowTask extends Component {
       hour: "numeric",
       minute: "numeric"
     };
+    if (this.state.redirect) return <Redirect to="/login" />;
+
     return (
       <div>
         <div className="singleTaskHeader">
@@ -115,13 +158,37 @@ class ShowTask extends Component {
               {this.state.task.title}
             </div>
           </div>
-          <div
-            className="addThisTaskToTimeline borderBottomRadius"
-            onClick={e => this.addTask(e)}
-          >
-            Add to your schedule
-            <AddIcon />
-          </div>
+          {this.props.name !== undefined &&
+          this.props.name === this.state.creator.name ? (
+            <Link
+              to={{
+                pathname: `/task/edit/${this.props.match.params.id}`,
+                state: { task: this.state.task }
+              }}
+            >
+              <div className="addThisTask">
+                Edit task
+                <EditIcon />
+              </div>
+            </Link>
+          ) : null}
+          {this.ifAssigned() ? (
+            <div
+              className="addThisTaskToTimeline borderBottomRadius"
+              onClick={e => this.removeTask(e)}
+            >
+              Remove from my schedle
+              <RemoveIcon />
+            </div>
+          ) : (
+            <div
+              className="addThisTaskToTimeline borderBottomRadius"
+              onClick={e => this.addTask(e)}
+            >
+              Add to my schedule
+              <AddIcon />
+            </div>
+          )}
         </div>
 
         <div className="singleTaskDescription">
@@ -139,15 +206,15 @@ class ShowTask extends Component {
           </div>
         </div>
 
-        {this.state.assignees.map(user => (
-          <div className="singleTaskDescriptionUser" key={user.id}>
-            <PersonIcon className="singleTaskTimeAvarat" />
-            <div className="singleTaskTitle">
-              <div className="dateTimeHeader">Assigned to:</div>
-              {user.name}
+        <div className="assignedToUsers">
+          <div className="dateTimeHeader w-100">Assigned to:</div>
+          {this.state.assignees.map(user => (
+            <div key={user.id} className="w-100 d-flex align-items-center mt-3">
+              <PersonIcon className="singleTaskTimeAvarat" />
+              <span className="singleTaskTitle">{user.name}</span>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     );
   }
@@ -161,4 +228,12 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default compose(withRouter, connect(null, mapDispatchToProps))(ShowTask);
+function mapStateToProps(state) {
+  const { name } = state;
+  return { name: name };
+}
+
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(ShowTask);

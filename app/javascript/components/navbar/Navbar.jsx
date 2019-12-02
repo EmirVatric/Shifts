@@ -228,7 +228,7 @@ export default function PersistentDrawerLeft(props) {
                 <ListItemIcon>
                   <StarBorder />
                 </ListItemIcon>
-                <ListItemText primary="Favorite Books" />
+                <ListItemText primary="My Day" />
               </ListItem>
               <Link
                 to="/tasks"
@@ -251,7 +251,7 @@ export default function PersistentDrawerLeft(props) {
                   <ListItemIcon>
                     <AddIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Create Tasks" />
+                  <ListItemText primary="Create Task" />
                 </ListItem>
               </Link>
             </List>

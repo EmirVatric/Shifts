@@ -7,6 +7,7 @@ import Signup from "../components/sessions/Register";
 import CreateTask from "../components/tasks/create";
 import Tasks from "../components/tasks/index";
 import ShowTask from "../components/tasks/show";
+import EditTask from "../components/tasks/edit";
 
 export default (
   <Router>
@@ -35,6 +36,15 @@ export default (
         render={() => (
           <Navbar title="Create Task">
             <CreateTask />
+          </Navbar>
+        )}
+      />
+      <Route
+        path="/task/edit/:id"
+        exact
+        render={({ match, history, location }) => (
+          <Navbar title="Edit Task">
+            <EditTask match={match} history={history} location={location} />
           </Navbar>
         )}
       />

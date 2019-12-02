@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:create]
     resources :tasks, only: [:create, :index, :update, :show, :destroy]
     post :assignment, to: 'tasks#assignment'
+    delete :assignment, to: 'tasks#unassigne'
     delete :logout, to: "sessions#logout"
     get :logged_in, to: "sessions#logged_in"
   end

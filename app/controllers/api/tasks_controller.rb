@@ -41,6 +41,27 @@ class Api::TasksController < ApplicationController
     end
   end
 
+  def unassigne
+    begin
+      task = Task.find(params[:id])
+      assignement = Manager.where("user_id = ? AND task_id = ?", @current_user.id, task.id).first
+      
+      if assignement.destroy
+        render json: {
+          status: 200,
+          assignees: task.assignees,
+          user: @current_user
+        }
+      end
+    rescue StandardError => msg
+      render json: {
+        status: 404,
+        errors: msg,
+        assignees: task.assignees
+      }
+    end
+  end
+
   def update
   end
 
@@ -48,13 +69,15 @@ class Api::TasksController < ApplicationController
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
       task = Task.find(params[:id])
-      creator = if task.creator then task.creator.attributes.slice('id', 'name') else '' end
+      creator = if task.creator then task.creator else '' end
       assignees = task.assignees
+      user = @current_user
       render json: {
         status: 200,
         task: task,
         creator: creator,
-        assignees: assignees
+        assignees: assignees,
+        user: user
       }
     rescue StandardError => msg 
       render json: {
