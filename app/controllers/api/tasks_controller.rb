@@ -43,6 +43,7 @@ class Api::TasksController < ApplicationController
 
   def unassigne
     begin
+      raise 'You are not allowd to access this site!' if !logged_in?
       task = Task.find(params[:id])
       assignement = Manager.where("user_id = ? AND task_id = ?", @current_user.id, task.id).first
       
@@ -58,6 +59,24 @@ class Api::TasksController < ApplicationController
         status: 404,
         errors: msg,
         assignees: task.assignees
+      }
+    end
+  end
+
+  def timeline
+    begin
+      raise 'You are not allowd to access this site!' if !logged_in?
+      tasks = @current_user.assigned_tasks.where(start_time: Date.parse(params[:date]).beginning_of_day..Date.parse(params[:date]).end_of_day)
+      
+      render json: {
+        status: 200,
+        tasks: tasks
+      }
+    rescue StandardError => msg
+      render json: {
+        status: 404,
+        errors: msg,
+        tasks: []
       }
     end
   end

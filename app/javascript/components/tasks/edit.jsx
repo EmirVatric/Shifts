@@ -131,14 +131,6 @@ class EditTask extends Component {
 
   render() {
     if (this.state.redirect) return <Redirect to="/login" />;
-
-    const options = {
-      month: "short",
-      day: "numeric",
-      year: "2-digit",
-      hour: "numeric",
-      minute: "numeric"
-    };
     return (
       <div>
         <Container maxWidth="sm">

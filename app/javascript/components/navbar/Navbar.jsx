@@ -23,6 +23,7 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Timeline from "../tasks/timeline";
 
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
@@ -224,12 +225,18 @@ export default function PersistentDrawerLeft(props) {
           </ListItem>
           <Collapse in={openBooks} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
-                <ListItemText primary="My Day" />
-              </ListItem>
+              <Link
+                to="/timeline"
+                onClick={handleDrawerClose}
+                className={classes.link}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText primary="My Day" />
+                </ListItem>
+              </Link>
               <Link
                 to="/tasks"
                 onClick={handleDrawerClose}

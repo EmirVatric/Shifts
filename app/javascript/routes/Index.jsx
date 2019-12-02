@@ -8,6 +8,7 @@ import CreateTask from "../components/tasks/create";
 import Tasks from "../components/tasks/index";
 import ShowTask from "../components/tasks/show";
 import EditTask from "../components/tasks/edit";
+import TimelineTasks from "../components/tasks/timeline";
 
 export default (
   <Router>
@@ -54,6 +55,15 @@ export default (
         render={() => (
           <Navbar title="Create Task">
             <Tasks />
+          </Navbar>
+        )}
+      />
+      <Route
+        path="/timeline"
+        exact
+        render={() => (
+          <Navbar title="MyTasks">
+            <TimelineTasks />
           </Navbar>
         )}
       />
