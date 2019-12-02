@@ -21,7 +21,11 @@ class Task < ApplicationRecord
     end
 
     if self.start_time && self.start_time < Date.today
-      errors.add(:start_time, "Start time cannot be in the past.")
+      errors.add(:start_time, "time cannot be in the past.")
+    end
+
+    if self.end_time - self.start_time > 28800
+      errors.add(:task_time, "cannot last longer than 8 hours.")
     end
   end
 end

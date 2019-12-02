@@ -14,6 +14,11 @@ import PersonIcon from "@material-ui/icons/Person";
 import EditIcon from "@material-ui/icons/Edit";
 import RemoveIcon from "@material-ui/icons/Remove";
 
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+
 class ShowTask extends Component {
   constructor(props) {
     super(props);
@@ -22,9 +27,10 @@ class ShowTask extends Component {
       task: "",
       creator: "",
       assignees: [],
-      errors: [],
+      errors: "",
       user: {},
-      redirect: false
+      redirect: false,
+      open: false
     };
   }
 
@@ -47,7 +53,9 @@ class ShowTask extends Component {
       })
       .then(response => {
         this.setState({
-          assignees: response.assignees
+          assignees: response.assignees,
+          errors: response.errors,
+          open: true
         });
       })
       .catch(e => console.log(e));
@@ -121,6 +129,13 @@ class ShowTask extends Component {
 
     return result;
   }
+
+  handleClose() {
+    this.setState({
+      errors: "",
+      open: false
+    });
+  }
   render() {
     const options = {
       month: "short",
@@ -133,6 +148,33 @@ class ShowTask extends Component {
 
     return (
       <div>
+        {this.state.errors.length > 0 ? (
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left"
+            }}
+            open={this.state.open}
+            autoHideDuration={6000}
+            onClose={e => this.handleClose()}
+            ContentProps={{
+              "aria-describedby": "message-id"
+            }}
+            message={<span id="message-id">{this.state.errors}</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="close"
+                color="inherit"
+                className="p-3"
+                onClick={e => this.handleClose()}
+              >
+                <CloseIcon />
+              </IconButton>
+            ]}
+          />
+        ) : null}
+
         <div className="singleTaskHeader">
           <div className="singleTaskSubtextWrapper borderTopRadius">
             <AccessTimeIcon className="singleTaskTimeAvarat" />

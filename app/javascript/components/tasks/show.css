@@ -92,6 +92,10 @@
   color: #4154B3;
 }
 
+.MuiSnackbarContent-root {
+  background-color: orange !important;
+}
+
 .singleTaskDescriptionUser {
   display: flex;
   padding: 10px 10px;

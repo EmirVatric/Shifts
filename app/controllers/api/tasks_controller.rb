@@ -27,10 +27,17 @@ class Api::TasksController < ApplicationController
 
       raise 'This user has already been assigned to this task!' if Manager.where(user_id: user.id, task_id: task.id).exists?
 
+      user.assigned_tasks.each do |prev|
+        if task.start_time.between?(prev.start_time, prev.end_time) || task.start_time.between?(prev.start_time, prev.end_time)
+          raise 'This time slot is already taken!'
+        end
+      end
+
       user.assigned_tasks << task
       render json: {
         status: 200,
-        assignees: task.assignees
+        assignees: task.assignees,
+        errors: ''
       }
     rescue StandardError => msg 
       render json: {
