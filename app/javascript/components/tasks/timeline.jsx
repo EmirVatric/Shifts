@@ -66,7 +66,7 @@ class TimelineTasks extends Component {
           <DatePicker
             helperText={this.state.DateErrors}
             className="w-100 mt-3"
-            label="Start date and time"
+            label="Date"
             inputVariant="outlined"
             value={this.state.date}
             onChange={e => this.handleChange(e)}
