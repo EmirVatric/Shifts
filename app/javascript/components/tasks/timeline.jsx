@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import "./timeline.css";
 
 import { Redirect } from "react-router";
@@ -98,6 +99,13 @@ class TimelineTasks extends Component {
               title={task.title}
             >
               {task.description}
+              <Link
+                from="/timeline"
+                to={`/task/${task.id}`}
+                className="linkToTask"
+              >
+                See Task
+              </Link>
             </Event>
           ))}
         </Timeline>
