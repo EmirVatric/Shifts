@@ -1,17 +1,22 @@
 import React, { Component } from "react";
 import "./timeline.css";
 
+import { Redirect } from "react-router";
+import { connect } from "react-redux";
+import { loggedInStatus } from "../../actions/index";
+
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
-import { Timeline, TimelineItem } from "vertical-timeline-component-for-react";
+import { Timeline, Event } from "react-timeline-scribble";
 
 class TimelineTasks extends Component {
   constructor(props) {
     super(props);
     this.state = {
       date: new Date(),
-      tasks: []
+      tasks: [],
+      redirect: false
     };
   }
 
@@ -41,6 +46,11 @@ class TimelineTasks extends Component {
   }
 
   componentDidMount() {
+    this.props.loggedIn().then(res => {
+      this.setState({
+        redirect: !res.loggedIn
+      });
+    });
     this.getDayTasks();
   }
 
@@ -56,16 +66,17 @@ class TimelineTasks extends Component {
   }
 
   render() {
+    if (this.state.redirect) return <Redirect to="/login" />;
     const options = {
       hour: "numeric",
       minute: "numeric"
     };
     return (
       <div>
-        <MuiPickersUtilsProvider utils={DateFnsUtils} className="mb-0">
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <DatePicker
             helperText={this.state.DateErrors}
-            className="w-100 mt-3"
+            className="w-100 mb-5"
             label="Date"
             inputVariant="outlined"
             value={this.state.date}
@@ -73,24 +84,21 @@ class TimelineTasks extends Component {
           />
         </MuiPickersUtilsProvider>
 
-        <Timeline lineColor={"#4154B3"} className="mt-0">
+        <Timeline>
           {this.state.tasks.map(task => (
-            <TimelineItem
+            <Event
               key={task.id}
-              dateText={`${new Date(task.start_time).toLocaleTimeString(
+              interval={`${new Date(task.start_time).toLocaleTimeString(
                 "en-US",
                 options
               )} - ${new Date(task.end_time).toLocaleTimeString(
                 "en-US",
                 options
               )}`}
-              style={{ color: "#e86971" }}
+              title={task.title}
             >
-              <p className="timelineTitleSubtext">Title:</p>
-              <h3 className="mb-2">{task.title}</h3>
-              <p className="timelineTitleSubtext">Description:</p>
-              <p className="mt-1">{task.description}</p>
-            </TimelineItem>
+              {task.description}
+            </Event>
           ))}
         </Timeline>
       </div>
@@ -98,4 +106,12 @@ class TimelineTasks extends Component {
   }
 }
 
-export default TimelineTasks;
+const mapDispatchToProps = dispatch => {
+  return {
+    loggedIn: () => {
+      return dispatch(loggedInStatus());
+    }
+  };
+};
+
+export default connect(null, mapDispatchToProps)(TimelineTasks);
