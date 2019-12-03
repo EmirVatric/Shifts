@@ -4,6 +4,17 @@ class User < ApplicationRecord
   has_many :managers
   has_many :assigned_tasks, through: :managers, source: 'task'
 
+  has_many :teammanagers
+  has_many :teams, through: :teammanagers, source: 'team'
+
+  has_many :created_teams, class_name: 'Team', foreign_key: "creator_id"
+
+
+  def day_tasks(day)
+    self.assigned_tasks.where(start_time: Date.parse(day).beginning_of_day..Date.parse(day).end_of_day).order('start_time ASC')
+  end
+
+
   validates :email, presence: true, uniqueness: true
   validates :name, presence: true
 end

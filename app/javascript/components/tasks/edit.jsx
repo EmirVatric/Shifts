@@ -129,6 +129,24 @@ class EditTask extends Component {
       .catch(err => console.log(err));
   }
 
+  handleDelete(e) {
+    e.preventDefault();
+
+    let url = `/api/tasks/${this.props.location.state.task.id}`;
+    fetch(url, {
+      method: "DELETE"
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(response => {
+        this.props.history.push(`/tasks`);
+      })
+      .catch(err => console.log(err));
+  }
+
   render() {
     if (this.state.redirect) return <Redirect to="/login" />;
     return (
@@ -204,6 +222,16 @@ class EditTask extends Component {
                 onClick={e => this.handleSubmit(e)}
               >
                 Submit Changes
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                className="submit"
+                onClick={e => this.handleDelete(e)}
+              >
+                Delete Task
               </Button>
             </form>
           </div>

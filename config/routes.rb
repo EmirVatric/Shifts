@@ -3,6 +3,8 @@ Rails.application.routes.draw do
     resources :sessions, only: [:create]
     resources :registrations, only: [:create]
     resources :tasks, only: [:create, :index, :update, :show, :destroy]
+    resources :teams, only: [:create, :index, :update, :show, :destroy]
+    get :userteams, to: 'teams#userteams'
     post :assignment, to: 'tasks#assignment'
     post :timeline, to: 'tasks#timeline'
     delete :assignment, to: 'tasks#unassigne'

@@ -9,6 +9,8 @@ import Tasks from "../components/tasks/index";
 import ShowTask from "../components/tasks/show";
 import EditTask from "../components/tasks/edit";
 import TimelineTasks from "../components/tasks/timeline";
+import CreateTeam from "../components/teams/create";
+import AllTeams from "../components/teams/index";
 
 export default (
   <Router>
@@ -41,6 +43,15 @@ export default (
         )}
       />
       <Route
+        path="/teams/create"
+        exact
+        render={({ history }) => (
+          <Navbar title="Create Team">
+            <CreateTeam history={history} />
+          </Navbar>
+        )}
+      />
+      <Route
         path="/task/edit/:id"
         exact
         render={({ match, history, location }) => (
@@ -53,8 +64,17 @@ export default (
         path="/tasks"
         exact
         render={() => (
-          <Navbar title="Create Task">
+          <Navbar title="All Task">
             <Tasks />
+          </Navbar>
+        )}
+      />
+      <Route
+        path="/teams"
+        exact
+        render={({ history }) => (
+          <Navbar title="All Team">
+            <AllTeams history={history} />
           </Navbar>
         )}
       />

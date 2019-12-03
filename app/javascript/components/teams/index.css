@@ -1,0 +1,20 @@
+.arrowTask {
+  padding: 0px;
+  background: #60b94e;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.tab:focus {
+  outline: none;
+}
+
+.wrapperTask {
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
+}

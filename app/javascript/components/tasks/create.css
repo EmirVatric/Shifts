@@ -23,3 +23,7 @@
   height: 50px;
   margin-top: 5% !important;
 }
+
+.taskCreateSelect {
+  width: 100%;
+}

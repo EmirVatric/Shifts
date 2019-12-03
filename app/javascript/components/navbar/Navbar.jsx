@@ -23,8 +23,8 @@ import LockOpenIcon from "@material-ui/icons/LockOpen";
 import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import Timeline from "../tasks/timeline";
 
+import GroupIcon from "@material-ui/icons/Group";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import StarBorder from "@material-ui/icons/StarBorder";
@@ -153,6 +153,7 @@ export default function PersistentDrawerLeft(props) {
   const loggedIn = useSelector(state => state.loggedIn);
   const [open, setOpen] = React.useState(false);
   const [openBooks, setOpenBooks] = React.useState(false);
+  const [openTeams, setOpenTeams] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -164,6 +165,10 @@ export default function PersistentDrawerLeft(props) {
 
   const handleBooksOpen = () => {
     setOpenBooks(!openBooks);
+  };
+
+  const handleTeamsOpen = () => {
+    setOpenTeams(!openTeams);
   };
 
   return (
@@ -216,6 +221,55 @@ export default function PersistentDrawerLeft(props) {
               <ListItemText primary="Home" />
             </ListItem>
           </Link>
+
+          <ListItem button onClick={handleTeamsOpen}>
+            <ListItemIcon>
+              <GroupIcon />
+            </ListItemIcon>
+            <ListItemText primary="Teams" />
+            {openTeams ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+          <Collapse in={openTeams} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <Link
+                to="/timeline"
+                onClick={handleDrawerClose}
+                className={classes.link}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText primary="My Teams" />
+                </ListItem>
+              </Link>
+              <Link
+                to="/teams"
+                onClick={handleDrawerClose}
+                className={classes.link}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <TocIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="All Teams" />
+                </ListItem>
+              </Link>
+              <Link
+                to="/teams/create"
+                onClick={handleDrawerClose}
+                className={classes.link}
+              >
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <AddIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Create Team" />
+                </ListItem>
+              </Link>
+            </List>
+          </Collapse>
+
           <ListItem button onClick={handleBooksOpen}>
             <ListItemIcon>
               <BookIcon />

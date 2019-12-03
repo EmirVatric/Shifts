@@ -3,6 +3,7 @@ class Task < ApplicationRecord
   before_validation :time_difference
 
   belongs_to :creator, class_name: "User", foreign_key: "creator_id"
+  belongs_to :team, class_name: 'Team', foreign_key: 'team_id'
   has_many :managers
   has_many :assignees, through: :managers, source: 'user'
 
@@ -10,6 +11,8 @@ class Task < ApplicationRecord
   validates :description, presence: true,length: {minimum:10, maximum:200}
   validates :start_time, presence: true
   validates :end_time, presence: true
+
+
 
   def status_value
     self.status ||= false

@@ -5,7 +5,8 @@ class Api::TasksController < ApplicationController
   def create
     task = Task.new(task_params)
     task.creator = @current_user
-
+    team = Team.find(params[:task][:team])
+    task.team = team
     if task.save
       render json: {
         status: :created,
@@ -28,7 +29,7 @@ class Api::TasksController < ApplicationController
       raise 'This user has already been assigned to this task!' if Manager.where(user_id: user.id, task_id: task.id).exists?
 
       user.assigned_tasks.each do |prev|
-        if task.start_time.between?(prev.start_time, prev.end_time) || task.start_time.between?(prev.start_time, prev.end_time)
+        if task.start_time.between?(prev.start_time, prev.end_time) || task.end_time.between?(prev.start_time, prev.end_time)
           raise 'This time slot is already taken!'
         end
       end
@@ -73,8 +74,7 @@ class Api::TasksController < ApplicationController
   def timeline
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
-      tasks = @current_user.assigned_tasks.where(start_time: Date.parse(params[:date]).beginning_of_day..Date.parse(params[:date]).end_of_day)
-      
+      tasks = @current_user.day_tasks(params[:date])
       render json: {
         status: 200,
         tasks: tasks
@@ -149,12 +149,30 @@ class Api::TasksController < ApplicationController
     rescue StandardError => msg 
       render json: {
         status: 404,
-        errors: msg
+        errors: msg,
+        completedTasks: [],
+        pendingTasks: []
       }
     end
   end
 
-  def destory
+  def destroy
+    begin
+      task = Task.find(params[:id])
+      raise 'You are not allowd to access this site!' if !logged_in?
+      raise 'You need to be task creator to preform this action' if @current_user != task.creator
+
+      if task.destroy
+        render json: {
+          status: 200
+        }
+      end
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg
+      }
+    end
   end
 
   private
