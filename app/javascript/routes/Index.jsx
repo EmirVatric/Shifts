@@ -11,6 +11,7 @@ import EditTask from "../components/tasks/edit";
 import TimelineTasks from "../components/tasks/timeline";
 import CreateTeam from "../components/teams/create";
 import AllTeams from "../components/teams/index";
+import UpdateTeam from "../components/teams/edit";
 
 export default (
   <Router>
@@ -48,6 +49,15 @@ export default (
         render={({ history }) => (
           <Navbar title="Create Team">
             <CreateTeam history={history} />
+          </Navbar>
+        )}
+      />
+      <Route
+        path="/team/edit/:id"
+        exact
+        render={({ match, history, location }) => (
+          <Navbar title="Update Team">
+            <UpdateTeam match={match} history={history} location={location} />
           </Navbar>
         )}
       />

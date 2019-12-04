@@ -8,6 +8,7 @@ import "./index.css";
 import { connect } from "react-redux";
 import { loggedInStatus } from "../../actions/index";
 
+import { Redirect } from "react-router";
 import PersonIcon from "@material-ui/icons/Person";
 import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
@@ -18,7 +19,8 @@ class AllTeams extends Component {
     super(props);
     this.state = {
       teams: [],
-      name
+      name,
+      redirect: false
     };
   }
 
@@ -105,6 +107,7 @@ class AllTeams extends Component {
   }
 
   render() {
+    if (this.state.redirect) return <Redirect to="/login" />;
     return (
       <div>
         {this.state.teams.map(team => (
@@ -140,10 +143,20 @@ class AllTeams extends Component {
                 </div>
               </div>
             </div>
-            <div className="addThisTask height w-100">
-              Edit task
-              <EditIcon />
-            </div>
+            {team.creator === this.state.name ? (
+              <Link
+                to={{
+                  pathname: `/team/edit/${team.id}`,
+                  state: { team: team }
+                }}
+                className="w-100"
+              >
+                <div className="addThisTask height w-100">
+                  Edit team
+                  <EditIcon />
+                </div>
+              </Link>
+            ) : null}
             {this.ifMember(team.members) ? (
               <div
                 className="addThisTaskToTimeline borderBottomRadius height w-100"

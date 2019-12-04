@@ -1,10 +1,8 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router";
 
 import { connect } from "react-redux";
 import { loggedInStatus } from "../../actions/index";
-import { Redirect } from "react-router";
-
-import "../tasks/create.css";
 
 import AddIcon from "@material-ui/icons/Add";
 import Avatar from "@material-ui/core/Avatar";
@@ -14,12 +12,13 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-class CreateTeam extends Component {
+class UpdateTeam extends Component {
   constructor(props) {
     super(props);
     this.state = {
       redirect: false,
       name: "",
+      creator: "",
       description: "",
       NameErrors: "",
       DescriptionErrors: ""
@@ -27,11 +26,27 @@ class CreateTeam extends Component {
   }
 
   componentDidMount() {
-    this.props.loggedIn().then(res => {
-      this.setState({
-        redirect: !res.loggedIn
+    this.props
+      .loggedIn()
+      .then(res => {
+        this.setState({
+          redirect: !res.loggedIn
+        });
+      })
+      .then(() => {
+        const { name, description, creator } = this.props.location.state.team;
+
+        this.setState({
+          name,
+          description,
+          creator
+        });
+      })
+      .then(() => {
+        if (this.state.creator !== this.props.name) {
+          this.props.history.push(`/`);
+        }
       });
-    });
   }
 
   handleChange(event) {
@@ -55,9 +70,10 @@ class CreateTeam extends Component {
 
   handleSumbit(e) {
     e.preventDefault();
-    const url = "/api/teams";
+
+    const url = `/api/teams/${this.props.location.state.team.id}`;
     fetch(url, {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
@@ -71,19 +87,23 @@ class CreateTeam extends Component {
         }
       })
       .then(response => {
+        console.log(response);
         if (response.status == 500) {
           response.errors.forEach(error => {
             this.setState({
               [error.split(" ")[0] + "Errors"]: error
             });
           });
-        } else if (response.status == "created") {
+        } else if (response.status == 200) {
           this.props.history.push(`/`);
         }
       })
       .catch(e => console.log(e));
   }
 
+  handleDelete(e) {
+    e.preventDefault();
+  }
   render() {
     if (this.state.redirect) return <Redirect to="/login" />;
     return (
@@ -105,6 +125,7 @@ class CreateTeam extends Component {
                 margin="normal"
                 required
                 fullWidth
+                value={this.state.name}
                 id="name"
                 label="Team Name"
                 name="name"
@@ -117,6 +138,7 @@ class CreateTeam extends Component {
                 helperText={this.state.DescriptionErrors}
                 variant="outlined"
                 margin="normal"
+                value={this.state.description}
                 fullWidth
                 className="mt-0"
                 id="description"
@@ -134,7 +156,17 @@ class CreateTeam extends Component {
                 className="submit"
                 onClick={e => this.handleSumbit(e)}
               >
-                Create New Team
+                Submit
+              </Button>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                className="submit"
+                onClick={e => this.handleDelete(e)}
+              >
+                Delete Team
               </Button>
             </form>
           </div>
@@ -152,4 +184,9 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(CreateTeam);
+function mapStateToProps(state) {
+  const { name } = state;
+  return { name: name };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateTeam);

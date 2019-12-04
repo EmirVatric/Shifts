@@ -144,6 +144,30 @@ class Api::TeamsController < ApplicationController
     end
   end
 
+  def update
+    begin
+      team = Team.find(params[:id])
+      raise 'You have to bee logged in to edit tasks!' if !logged_in?
+      raise 'You have to be creator of the task to edit it!' if team.team_creator != @current_user
+
+      if team.update_attributes(team_params)
+        render json: {
+          status: 200
+        }
+      else
+        render json: { 
+          status: 500,
+          errors: team.errors.full_messages 
+        }
+      end
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg
+      }
+    end
+  end
+
 
   private 
   def team_params
