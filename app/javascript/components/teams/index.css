@@ -22,6 +22,7 @@
 .creatorSubtext {
   color: #4154B3;
   font-size: 11px;
+  white-space: nowrap;
 }
 
 .creatorText {
@@ -62,4 +63,8 @@
   font-weight: 600;
   font-size: 12px;
   justify-content: space-between;
+}
+
+.memberList {
+  white-space: nowrap;
 }

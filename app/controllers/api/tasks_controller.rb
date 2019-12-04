@@ -175,6 +175,24 @@ class Api::TasksController < ApplicationController
     end
   end
 
+  def count
+    begin
+      tasks = Task.all.count
+      teams = Team.all.count
+
+      render json: {
+        status: 200,
+        tasks: tasks,
+        teams: teams
+      }
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg
+      }
+    end
+  end
+
   private
 
   def task_params

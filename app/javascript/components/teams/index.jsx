@@ -113,10 +113,16 @@ class AllTeams extends Component {
         {this.state.teams.map(team => (
           <Paper className="wrapperTask row mb-3" key={team.id}>
             <div className="col-12 pt-3 pb-3">
-              <Typography variant="h6" component="h6" className="text-center">
+              <Typography
+                variant="h6"
+                component="h6"
+                className="text-center"
+                noWrap
+              >
                 {team.name}
               </Typography>
               <Typography
+                noWrap
                 component="h5"
                 variant="caption"
                 className="text-center d-flex align-items-center justify-content-center"
@@ -133,13 +139,15 @@ class AllTeams extends Component {
                   <div className="creatorSubtext">Members:</div>
                   <div className="membersList">
                     {team.members.map(user => (
-                      <div key={user}>{user}</div>
+                      <div className="memberList" key={user}>
+                        {user}
+                      </div>
                     ))}
                   </div>
                 </div>
                 <div className="teamsDescription col-6 text-right">
                   <div className="creatorSubtext">Description:</div>
-                  <div>{team.description}</div>
+                  <div className="teamDesc">{team.description}</div>
                 </div>
               </div>
             </div>
