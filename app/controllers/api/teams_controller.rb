@@ -168,6 +168,25 @@ class Api::TeamsController < ApplicationController
     end
   end
 
+  def destroy
+    begin
+      team = Team.find(params[:id])
+      raise 'You are not allowd to access this site!' if !logged_in?
+      raise 'You need to be task creator to preform this action' if @current_user != team.team_creator
+
+      if team.destroy
+        render json: {
+          status: 200
+        }
+      end
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg
+      }
+    end
+  end
+
 
   private 
   def team_params

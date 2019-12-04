@@ -87,7 +87,6 @@ class UpdateTeam extends Component {
         }
       })
       .then(response => {
-        console.log(response);
         if (response.status == 500) {
           response.errors.forEach(error => {
             this.setState({
@@ -95,7 +94,7 @@ class UpdateTeam extends Component {
             });
           });
         } else if (response.status == 200) {
-          this.props.history.push(`/`);
+          this.props.history.push(`/teams`);
         }
       })
       .catch(e => console.log(e));
@@ -103,6 +102,20 @@ class UpdateTeam extends Component {
 
   handleDelete(e) {
     e.preventDefault();
+
+    let url = `/api/teams/${this.props.location.state.team.id}`;
+    fetch(url, {
+      method: "DELETE"
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(response => {
+        this.props.history.push(`/teams`);
+      })
+      .catch(err => console.log(err));
   }
   render() {
     if (this.state.redirect) return <Redirect to="/login" />;
