@@ -50,11 +50,13 @@ class Api::TeamsController < ApplicationController
       
       teams = Team.all.map do |team|
         creator = team.team_creator
+        members = team.users.map {|user| user.name}
         teams = {
           id: team.id,
           name: team.name,
           description: team.description,
-          creator: creator.name
+          creator: creator.name,
+          members: members
         }
       end
 
@@ -62,6 +64,77 @@ class Api::TeamsController < ApplicationController
         status: 200,
         teams: teams
       }
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg,
+        temas: []
+      }
+    end
+  end
+
+  def join_team
+    begin
+      raise 'Please first loggin!' if !logged_in?
+      team = Team.find(params[:id])
+
+      @current_user.teams << team
+
+      teams = Team.all.map do |team|
+        creator = team.team_creator
+        members = team.users.map {|user| user.name}
+        teams = {
+          id: team.id,
+          name: team.name,
+          description: team.description,
+          creator: creator.name,
+          members: members
+        }
+      end
+
+      render json: {
+        status: 200,
+        teams: teams
+      }
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg,
+        temas: []
+      }
+    end
+  end
+
+  def leave_team
+    begin
+      raise 'Please first loggin!' if !logged_in?
+      team = Team.find(params[:id])
+      raise 'This team does not exists' if team.nil?
+      teammanager = Teammanager.where("user_id = ? AND team_id = ?", @current_user.id, team.id).first
+      raise 'You are not part of this team' if teammanager.nil?
+      teammanager.destroy
+      teams = Team.all.map do |team|
+        creator = team.team_creator
+        if team.users.size > 0
+          members = team.users.map {|user| user.name}
+        else
+          members = []
+        end
+        teams = {
+          id: team.id,
+          name: team.name,
+          description: team.description,
+          creator: creator.name,
+          members: members
+        }
+      end
+
+      render json: {
+        status: 200,
+        teams: teams
+      }
+      
+
     rescue StandardError => msg
       render json: {
         status: 500,

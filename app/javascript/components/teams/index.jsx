@@ -5,19 +5,30 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import "./index.css";
 
-import PersonIcon from "@material-ui/icons/Person";
+import { connect } from "react-redux";
+import { loggedInStatus } from "../../actions/index";
 
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import PersonIcon from "@material-ui/icons/Person";
+import EditIcon from "@material-ui/icons/Edit";
+import AddIcon from "@material-ui/icons/Add";
+import RemoveIcon from "@material-ui/icons/Remove";
 
 class AllTeams extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      teams: []
+      teams: [],
+      name
     };
   }
 
   componentDidMount() {
+    this.props.loggedIn().then(res => {
+      this.setState({
+        redirect: !res.loggedIn,
+        name: res.name
+      });
+    });
     const url = "/api/teams";
     fetch(url)
       .then(response => {
@@ -33,38 +44,141 @@ class AllTeams extends Component {
       .catch(e => console.log(e));
   }
 
+  joinTeam(e) {
+    let url = `/api/jointeam`;
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: e
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok!");
+      })
+      .then(response => {
+        this.setState({
+          teams: response.teams
+        });
+      })
+      .catch(e => console.log(e));
+  }
+
+  leaveTeam(team) {
+    let url = `/api/leaveteam`;
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: team
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Network response was not ok!");
+      })
+      .then(response => {
+        this.setState({
+          teams: response.teams
+        });
+      })
+      .catch(e => console.log(e));
+  }
+
+  ifMember(team) {
+    let result = false;
+    team.forEach(member => {
+      if (member === this.state.name) {
+        result = true;
+      }
+    });
+    return result;
+  }
+
   render() {
     return (
       <div>
         {this.state.teams.map(team => (
-          <Link from="/tasks" to={`/team/${team.id}`} key={team.id}>
-            <Paper className="wrapperTask row mb-3">
-              <div className="col-11 pt-3 pb-3">
-                <Typography variant="h6" component="h6" className="text-center">
-                  {team.name}
-                </Typography>
-                <Typography
-                  component="h5"
-                  variant="caption"
-                  className="text-center d-flex align-items-center justify-content-center"
-                  noWrap
-                >
-                  <div className="mr-2">
-                    <PersonIcon className="mr-1" /> Creator:
+          <Paper className="wrapperTask row mb-3" key={team.id}>
+            <div className="col-12 pt-3 pb-3">
+              <Typography variant="h6" component="h6" className="text-center">
+                {team.name}
+              </Typography>
+              <Typography
+                component="h5"
+                variant="caption"
+                className="text-center d-flex align-items-center justify-content-center"
+                noWrap
+              >
+                <PersonIcon className="mr-1 personIconCreator" />
+                <div className="mr-2 text-left">
+                  <div className="creatorSubtext">Creator:</div>
+                  <div className="creatorText">{team.creator}</div>
+                </div>
+              </Typography>
+              <div className="teamMembers row">
+                <div className="col-6">
+                  <div className="creatorSubtext">Members:</div>
+                  <div className="membersList">
+                    {team.members.map(user => (
+                      <div key={user}>{user}</div>
+                    ))}
                   </div>
-
-                  {team.creator}
-                </Typography>
+                </div>
+                <div className="teamsDescription col-6 text-right">
+                  <div className="creatorSubtext">Description:</div>
+                  <div>{team.description}</div>
+                </div>
               </div>
-              <div className="col-1 arrowTask">
-                <ArrowForwardIosIcon />
+            </div>
+            <div className="addThisTask height w-100">
+              Edit task
+              <EditIcon />
+            </div>
+            {this.ifMember(team.members) ? (
+              <div
+                className="addThisTaskToTimeline borderBottomRadius height w-100"
+                onClick={e => this.leaveTeam(team.id)}
+              >
+                Leave the Team
+                <RemoveIcon />
               </div>
-            </Paper>
-          </Link>
+            ) : (
+              <div
+                className="addThisTaskToTimeline height borderBottomRadius w-100"
+                onClick={e => this.joinTeam(team.id)}
+              >
+                Join the Team
+                <AddIcon />
+              </div>
+            )}
+          </Paper>
         ))}
       </div>
     );
   }
 }
 
-export default AllTeams;
+const mapDispatchToProps = dispatch => {
+  return {
+    loggedIn: () => {
+      return dispatch(loggedInStatus());
+    }
+  };
+};
+
+function mapStateToProps(state) {
+  const { name } = state;
+  return { name: name };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AllTeams);

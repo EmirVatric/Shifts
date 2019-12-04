@@ -7,6 +7,8 @@ Rails.application.routes.draw do
     get :userteams, to: 'teams#userteams'
     post :assignment, to: 'tasks#assignment'
     post :timeline, to: 'tasks#timeline'
+    post :jointeam, to: 'teams#join_team'
+    delete :leaveteam, to: 'teams#leave_team'
     delete :assignment, to: 'tasks#unassigne'
     delete :logout, to: "sessions#logout"
     get :logged_in, to: "sessions#logged_in"

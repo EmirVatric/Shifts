@@ -221,7 +221,6 @@ export default function PersistentDrawerLeft(props) {
               <ListItemText primary="Home" />
             </ListItem>
           </Link>
-
           <ListItem button onClick={handleTeamsOpen}>
             <ListItemIcon>
               <GroupIcon />
@@ -231,18 +230,6 @@ export default function PersistentDrawerLeft(props) {
           </ListItem>
           <Collapse in={openTeams} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
-              <Link
-                to="/timeline"
-                onClick={handleDrawerClose}
-                className={classes.link}
-              >
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <StarBorder />
-                  </ListItemIcon>
-                  <ListItemText primary="My Teams" />
-                </ListItem>
-              </Link>
               <Link
                 to="/teams"
                 onClick={handleDrawerClose}

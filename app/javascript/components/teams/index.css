@@ -18,3 +18,48 @@
   -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
   box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
 }
+
+.creatorSubtext {
+  color: #4154B3;
+  font-size: 11px;
+}
+
+.creatorText {
+  font-size: 13px;
+}
+
+.personIconCreator {
+  font-size: 30px !important;
+}
+
+.addThisTaskToTimeline {
+  height: 50px;
+  background: #4154B3;
+  display: flex;
+  color: white;
+  align-items: center;
+  padding: 0 14px;
+  font-weight: 600;
+  font-size: 12px;
+  justify-content: space-between;
+}
+
+.borderBottomRadius {
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.height {
+  height: 40px;
+}
+
+.addThisTask {
+  background: orange;
+  display: flex;
+  color: white;
+  align-items: center;
+  padding: 0 14px;
+  font-weight: 600;
+  font-size: 12px;
+  justify-content: space-between;
+}
