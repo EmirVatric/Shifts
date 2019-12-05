@@ -40,6 +40,11 @@ final, you can run the application using :
 ````
 rails server
 ````
+Run the migrations:
+
+```
+rails db:migrate
+```
 
 You can find the application running on localhost:3000
 
