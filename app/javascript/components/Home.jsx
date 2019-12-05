@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { loggedInStatus } from "../actions/index";
 import "./home.css";
 
+import { get } from "../utils/dataTransfer";
+
 import Paper from "@material-ui/core/Paper";
 import LowPriorityIcon from "@material-ui/icons/LowPriority";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
@@ -23,20 +25,12 @@ class Home extends Component {
   componentDidMount() {
     this.props.loggedIn();
 
-    const url = "/api/count";
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        this.setState({
-          teams: response.teams,
-          tasks: response.tasks
-        });
-      })
-      .catch(e => console.log(e));
+    get("/api/count").then(response => {
+      this.setState({
+        teams: response.teams,
+        tasks: response.tasks
+      });
+    });
   }
 
   render() {

@@ -10,6 +10,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
 import { Timeline, Event } from "react-timeline-scribble";
+import { post } from "../../utils/dataTransfer";
 
 class TimelineTasks extends Component {
   constructor(props) {
@@ -22,28 +23,11 @@ class TimelineTasks extends Component {
   }
 
   getDayTasks() {
-    let url = "api/timeline";
-
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        date: this.state.date
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        this.setState({
-          tasks: response.tasks
-        });
-      })
-      .catch(err => console.log(err));
+    post("api/timeline", this.state.date).then(response => {
+      this.setState({
+        tasks: response.tasks
+      });
+    });
   }
 
   componentDidMount() {

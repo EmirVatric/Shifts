@@ -16,6 +16,8 @@ import Container from "@material-ui/core/Container";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
 
+import { put, del } from "../../utils/dataTransfer";
+
 class EditTask extends Component {
   constructor(props) {
     super(props);
@@ -94,22 +96,8 @@ class EditTask extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const url = `/api/tasks/${this.props.location.state.task.id}`;
-    fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        task: this.state
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
+    put(`/api/tasks/${this.props.location.state.task.id}`, this.state).then(
+      response => {
         if (response.status == 500) {
           response.errors.forEach(error => {
             if (error.split(" ")[1] == "time") {
@@ -125,26 +113,15 @@ class EditTask extends Component {
         } else if (response.status == 200) {
           this.props.history.push(`/task/${this.props.location.state.task.id}`);
         }
-      })
-      .catch(err => console.log(err));
+      }
+    );
   }
 
   handleDelete(e) {
     e.preventDefault();
-
-    let url = `/api/tasks/${this.props.location.state.task.id}`;
-    fetch(url, {
-      method: "DELETE"
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        this.props.history.push(`/tasks`);
-      })
-      .catch(err => console.log(err));
+    del(`/api/tasks/${this.props.location.state.task.id}`).then(response => {
+      this.props.history.push(`/tasks`);
+    });
   }
 
   render() {

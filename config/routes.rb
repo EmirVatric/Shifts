@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :registrations, only: [:create]
     resources :tasks, only: [:create, :index, :update, :show, :destroy]
     resources :teams, only: [:create, :index, :update, :show, :destroy]
+    get :profile, to: 'registrations#profile'
     get :userteams, to: 'teams#userteams'
     post :assignment, to: 'tasks#assignment'
     post :timeline, to: 'tasks#timeline'

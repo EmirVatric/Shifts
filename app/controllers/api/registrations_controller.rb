@@ -1,4 +1,5 @@
 class Api::RegistrationsController < ApplicationController
+  include CurrentUserConcern
   def create
     user = User.new(user_params)
 
@@ -11,6 +12,30 @@ class Api::RegistrationsController < ApplicationController
     else
       render json: { status: 500, errors: user.errors.full_messages }
     end
+  end
+
+  def profile
+    begin
+      unless logged_in?
+        render json: {
+          status: 401,
+          errors: 'You are not logged in'
+        }
+      end
+
+      render json: {
+        name: @current_user.name,
+        tasks: @current_user.assigned_tasks,
+        teams: @current_user.teams
+      }
+
+    rescue StandardError => msg
+      render json: {
+        status: 500,
+        errors: msg
+      }
+    end
+
   end
 
   private

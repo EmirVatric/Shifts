@@ -68,3 +68,7 @@
 .memberList {
   white-space: nowrap;
 }
+
+.wrapperTask {
+  min-width: 80vw;
+}

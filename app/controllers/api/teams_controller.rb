@@ -76,7 +76,7 @@ class Api::TeamsController < ApplicationController
   def join_team
     begin
       raise 'Please first loggin!' if !logged_in?
-      team = Team.find(params[:id])
+      team = Team.find(params[:data])
 
       @current_user.teams << team
 
@@ -108,7 +108,7 @@ class Api::TeamsController < ApplicationController
   def leave_team
     begin
       raise 'Please first loggin!' if !logged_in?
-      team = Team.find(params[:id])
+      team = Team.find(params[:data])
       raise 'This team does not exists' if team.nil?
       teammanager = Teammanager.where("user_id = ? AND team_id = ?", @current_user.id, team.id).first
       raise 'You are not part of this team' if teammanager.nil?
@@ -190,6 +190,6 @@ class Api::TeamsController < ApplicationController
 
   private 
   def team_params
-    params.require(:team).permit(:name,:description)
+    params.require(:data).permit(:name,:description)
   end
 end

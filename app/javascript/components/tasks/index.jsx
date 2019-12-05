@@ -15,6 +15,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 
+import { get } from "../../utils/dataTransfer";
+
 const classes = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
@@ -43,20 +45,24 @@ class Tasks extends Component {
         redirect: !res.loggedIn
       });
       if (res.loggedIn) {
-        const url = "/api/tasks";
-        fetch(url)
-          .then(response => {
-            if (response.ok) {
-              return response.json();
-            }
-          })
-          .then(response => {
-            this.setState({
-              completedTasks: response.completedTasks,
-              pendingTasks: response.pendingTasks
+        get("/api/tasks").then(response => {
+          let completedTasks = [];
+          let pendingTasks = [];
+          response.completedTasks.forEach(arr => {
+            arr.forEach(task => {
+              completedTasks.push(task);
             });
-          })
-          .catch(e => console.log(e));
+          });
+          response.pendingTasks.forEach(arr => {
+            arr.forEach(task => {
+              pendingTasks.push(task);
+            });
+          });
+          this.setState({
+            completedTasks: completedTasks,
+            pendingTasks: pendingTasks
+          });
+        });
       }
     });
   }
@@ -93,6 +99,14 @@ class Tasks extends Component {
               <Link from="/tasks" to={`/task/${task.id}`} key={task.id}>
                 <Paper className="wrapperTask row mb-3">
                   <div className="col-11 pt-3 pb-3">
+                    <Typography
+                      component="h5"
+                      variant="caption"
+                      className="text-center"
+                      noWrap
+                    >
+                      {task.team}
+                    </Typography>
                     <Typography
                       variant="h6"
                       component="h6"
@@ -131,6 +145,14 @@ class Tasks extends Component {
               <Link from="/tasks" to={`/task/${task.id}`} key={task.id}>
                 <Paper className="wrapperTask row mb-3">
                   <div className="col-11 pt-3 pb-3">
+                    <Typography
+                      component="h5"
+                      variant="caption"
+                      className="text-center"
+                      noWrap
+                    >
+                      {task.team}
+                    </Typography>
                     <Typography
                       variant="h6"
                       component="h6"

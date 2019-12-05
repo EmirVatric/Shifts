@@ -18,6 +18,9 @@ import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import GroupIcon from "@material-ui/icons/Group";
+
+import { get, post, del } from "../../utils/dataTransfer";
 
 class ShowTask extends Component {
   constructor(props) {
@@ -30,61 +33,28 @@ class ShowTask extends Component {
       errors: "",
       user: {},
       redirect: false,
-      open: false
+      open: false,
+      team: ""
     };
   }
 
   addTask(event) {
-    let url = `/api/assignment`;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: this.state.task.id
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Network response was not ok!");
-      })
-      .then(response => {
-        this.setState({
-          assignees: response.assignees,
-          errors: response.errors,
-          open: true
-        });
-      })
-      .catch(e => console.log(e));
+    post(`/api/assignment`, this.state.task.id).then(response => {
+      this.setState({
+        assignees: response.assignees,
+        errors: response.errors,
+        open: true
+      });
+    });
   }
 
   removeTask() {
-    let url = `/api/assignment`;
-    fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: this.state.task.id
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Network response was not ok!");
-      })
-      .then(response => {
-        this.setState({
-          assignees: response.assignees,
-          user: response.user
-        });
-      })
-      .catch(e => console.log(e));
+    del(`/api/assignment`, this.state.task.id).then(response => {
+      this.setState({
+        assignees: response.assignees,
+        user: response.user
+      });
+    });
   }
 
   componentDidMount() {
@@ -92,30 +62,16 @@ class ShowTask extends Component {
       this.setState({
         redirect: !res.loggedIn
       });
-      if (res.loggedIn) {
-      }
-      let url = `/api/tasks/${this.props.match.params.id}`;
-      fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          throw new Error("Network response was not ok!");
-        })
-        .then(response => {
-          this.setState({
-            task: response.task,
-            creator: response.creator,
-            assignees: response.assignees,
-            user: response.user
-          });
-        })
-        .catch(e => console.log(e));
+
+      get(`/api/tasks/${this.props.match.params.id}`).then(response => {
+        this.setState({
+          task: response.task,
+          creator: response.creator,
+          assignees: response.assignees,
+          user: response.user,
+          team: response.team
+        });
+      });
     });
   }
 
@@ -238,6 +194,14 @@ class ShowTask extends Component {
           <p className="singleTaskDescriptionContent">
             {this.state.task.description}
           </p>
+        </div>
+
+        <div className="singleTaskDescriptionUser">
+          <GroupIcon className="singleTaskTimeAvarat" />
+          <div className="singleTaskTitle">
+            <div className="dateTimeHeader">Team:</div>
+            {this.state.team}
+          </div>
         </div>
 
         <div className="singleTaskDescriptionUser">

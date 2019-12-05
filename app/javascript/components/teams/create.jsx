@@ -14,6 +14,8 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import { post } from "../../utils/dataTransfer";
+
 class CreateTeam extends Component {
   constructor(props) {
     super(props);
@@ -55,33 +57,17 @@ class CreateTeam extends Component {
 
   handleSumbit(e) {
     e.preventDefault();
-    const url = "/api/teams";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        team: this.state
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        if (response.status == 500) {
-          response.errors.forEach(error => {
-            this.setState({
-              [error.split(" ")[0] + "Errors"]: error
-            });
+    post("/api/teams", this.state).then(response => {
+      if (response.status == 500) {
+        response.errors.forEach(error => {
+          this.setState({
+            [error.split(" ")[0] + "Errors"]: error
           });
-        } else if (response.status == "created") {
-          this.props.history.push(`/`);
-        }
-      })
-      .catch(e => console.log(e));
+        });
+      } else if (response.status == "created") {
+        this.props.history.push(`/teams`);
+      }
+    });
   }
 
   render() {

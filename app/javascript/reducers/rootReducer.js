@@ -8,7 +8,8 @@ const rootReducer = (state = initState, action) => {
     case "CHECK_LOGIN":
       return {
         loggedIn: action.loggedIn,
-          name: action.name
+          name: action.name,
+          id: action.id
       }
       default:
         return state

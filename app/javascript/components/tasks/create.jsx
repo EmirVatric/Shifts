@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { withRouter } from "react-router";
+import { withRouter, Redirect } from "react-router";
 import "./create.css";
 
 import AddIcon from "@material-ui/icons/Add";
@@ -9,11 +9,16 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
+import { connect } from "react-redux";
+import { loggedInStatus } from "../../actions/index";
+import { compose } from "redux";
 
 import { Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, DateTimePicker } from "@material-ui/pickers";
+
+import { get, post } from "../../utils/dataTransfer";
 
 class CreateTask extends Component {
   constructor(props) {
@@ -27,7 +32,8 @@ class CreateTask extends Component {
       start_time: new Date(),
       end_time: new Date(),
       teams: [],
-      team: ""
+      team: "",
+      redirect: false
     };
   }
 
@@ -69,63 +75,46 @@ class CreateTask extends Component {
   }
 
   componentDidMount() {
-    const url = "/api/userteams";
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        if (response.teams.length > 0) {
-          this.setState({
-            teams: response.teams,
-            team: response.teams[0].id
-          });
-        } else {
-          this.setState({
-            teams: response.teams,
-            team: ""
-          });
-        }
+    this.props.loggedIn().then(res => {
+      this.setState({
+        redirect: !res.loggedIn
       });
+    });
+
+    get("/api/userteams").then(response => {
+      if (response.teams.length > 0) {
+        this.setState({
+          teams: response.teams,
+          team: response.teams[0].id
+        });
+      } else {
+        this.setState({
+          teams: response.teams,
+          team: ""
+        });
+      }
+    });
   }
 
   handleSumbit(e) {
     e.preventDefault();
-    const url = "/api/tasks";
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        task: this.state
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        if (response.status == 500) {
-          response.errors.forEach(error => {
-            if (error.split(" ")[1] == "time") {
-              this.setState({
-                DateErrors: error
-              });
-            } else {
-              this.setState({
-                [error.split(" ")[0] + "Errors"]: error
-              });
-            }
-          });
-        } else if (response.status == "created") {
-          this.props.history.push(`/task/${response.task.id}`);
-        }
-      })
-      .catch(e => console.log(e));
+    post("/api/tasks", this.state).then(response => {
+      if (response.status == 500) {
+        response.errors.forEach(error => {
+          if (error.split(" ")[1] == "time") {
+            this.setState({
+              DateErrors: error
+            });
+          } else {
+            this.setState({
+              [error.split(" ")[0] + "Errors"]: error
+            });
+          }
+        });
+      } else if (response.status == "created") {
+        this.props.history.push(`/task/${response.task.id}`);
+      }
+    });
   }
 
   handleSelectChange(e) {
@@ -135,6 +124,7 @@ class CreateTask extends Component {
   }
 
   render() {
+    if (this.state.redirect) return <Redirect to="/login" />;
     return (
       <div>
         <Container maxWidth="sm">
@@ -233,5 +223,15 @@ class CreateTask extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    loggedIn: () => {
+      return dispatch(loggedInStatus());
+    }
+  };
+};
 
-export default withRouter(CreateTask);
+export default compose(
+  withRouter,
+  connect(null, mapDispatchToProps)
+)(CreateTask);

@@ -12,6 +12,8 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+import { put, del } from "../../utils/dataTransfer";
+
 class UpdateTeam extends Component {
   constructor(props) {
     super(props);
@@ -44,7 +46,7 @@ class UpdateTeam extends Component {
       })
       .then(() => {
         if (this.state.creator !== this.props.name) {
-          this.props.history.push(`/`);
+          this.props.history.push(`/teams`);
         }
       });
   }
@@ -70,23 +72,8 @@ class UpdateTeam extends Component {
 
   handleSumbit(e) {
     e.preventDefault();
-
-    const url = `/api/teams/${this.props.location.state.team.id}`;
-    fetch(url, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        team: this.state
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
+    put(`/api/teams/${this.props.location.state.team.id}`, this.state).then(
+      response => {
         if (response.status == 500) {
           response.errors.forEach(error => {
             this.setState({
@@ -96,27 +83,17 @@ class UpdateTeam extends Component {
         } else if (response.status == 200) {
           this.props.history.push(`/teams`);
         }
-      })
-      .catch(e => console.log(e));
+      }
+    );
   }
 
   handleDelete(e) {
     e.preventDefault();
-
-    let url = `/api/teams/${this.props.location.state.team.id}`;
-    fetch(url, {
-      method: "DELETE"
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        this.props.history.push(`/teams`);
-      })
-      .catch(err => console.log(err));
+    del(`/api/teams/${this.props.location.state.team.id}`).then(response => {
+      this.props.history.push(`/teams`);
+    });
   }
+
   render() {
     if (this.state.redirect) return <Redirect to="/login" />;
     return (

@@ -12,6 +12,7 @@ import TimelineTasks from "../components/tasks/timeline";
 import CreateTeam from "../components/teams/create";
 import AllTeams from "../components/teams/index";
 import UpdateTeam from "../components/teams/edit";
+import ShowUser from "../components/user/show";
 
 export default (
   <Router>
@@ -103,6 +104,15 @@ export default (
         render={({ match, history }) => (
           <Navbar title="Specific Task">
             <ShowTask match={match} history={history} />
+          </Navbar>
+        )}
+      />
+      <Route
+        path="/user/:id"
+        exact
+        render={({ match, history }) => (
+          <Navbar title="User Profile">
+            <ShowUser match={match} history={history} />
           </Navbar>
         )}
       />

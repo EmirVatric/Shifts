@@ -14,6 +14,8 @@ import EditIcon from "@material-ui/icons/Edit";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveIcon from "@material-ui/icons/Remove";
 
+import { post, get, del } from "../../utils/dataTransfer";
+
 class AllTeams extends Component {
   constructor(props) {
     super(props);
@@ -31,69 +33,27 @@ class AllTeams extends Component {
         name: res.name
       });
     });
-    const url = "/api/teams";
-    fetch(url)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      })
-      .then(response => {
-        this.setState({
-          teams: response.teams
-        });
-      })
-      .catch(e => console.log(e));
+    get("/api/teams").then(response => {
+      this.setState({
+        teams: response.teams
+      });
+    });
   }
 
   joinTeam(e) {
-    let url = `/api/jointeam`;
-    fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: e
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Network response was not ok!");
-      })
-      .then(response => {
-        this.setState({
-          teams: response.teams
-        });
-      })
-      .catch(e => console.log(e));
+    post(`/api/jointeam`, e).then(response => {
+      this.setState({
+        teams: response.teams
+      });
+    });
   }
 
   leaveTeam(team) {
-    let url = `/api/leaveteam`;
-    fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        id: team
-      })
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Network response was not ok!");
-      })
-      .then(response => {
-        this.setState({
-          teams: response.teams
-        });
-      })
-      .catch(e => console.log(e));
+    del(`/api/leaveteam`, team).then(response => {
+      this.setState({
+        teams: response.teams
+      });
+    });
   }
 
   ifMember(team) {

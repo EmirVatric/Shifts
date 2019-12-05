@@ -22,13 +22,15 @@ class Api::SessionsController < ApplicationController
     if @current_user
       render json: {
         logged_in: true,
-        user: @current_user
+        user: @current_user,
+        id: @current_user.id
       }
     else
       render json: {
         logged_in: false,
         user: {
-          name: ''
+          name: '',
+          id: ''
         }
       }
     end

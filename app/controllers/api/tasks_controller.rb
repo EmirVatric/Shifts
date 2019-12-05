@@ -5,7 +5,7 @@ class Api::TasksController < ApplicationController
   def create
     task = Task.new(task_params)
     task.creator = @current_user
-    team = Team.find(params[:task][:team])
+    team = Team.find(params[:data][:team])
     task.team = team
     if task.save
       render json: {
@@ -23,7 +23,7 @@ class Api::TasksController < ApplicationController
   def assignment
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
-      task = Task.find(params[:id])
+      task = Task.find(params[:data])
       user = @current_user
 
       raise 'This user has already been assigned to this task!' if Manager.where(user_id: user.id, task_id: task.id).exists?
@@ -52,7 +52,7 @@ class Api::TasksController < ApplicationController
   def unassigne
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
-      task = Task.find(params[:id])
+      task = Task.find(params[:data])
       assignement = Manager.where("user_id = ? AND task_id = ?", @current_user.id, task.id).first
       
       if assignement.destroy
@@ -74,7 +74,8 @@ class Api::TasksController < ApplicationController
   def timeline
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
-      tasks = @current_user.day_tasks(params[:date])
+      
+      tasks = @current_user.day_tasks(params[:data])
       render json: {
         status: 200,
         tasks: tasks
@@ -117,6 +118,7 @@ class Api::TasksController < ApplicationController
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
       task = Task.find(params[:id])
+      team = task.team.name
       creator = if task.creator then task.creator else '' end
       assignees = task.assignees
       user = @current_user
@@ -125,7 +127,8 @@ class Api::TasksController < ApplicationController
         task: task,
         creator: creator,
         assignees: assignees,
-        user: user
+        user: user,
+        team: team
       }
     rescue StandardError => msg 
       render json: {
@@ -138,8 +141,32 @@ class Api::TasksController < ApplicationController
   def index
     begin
       raise 'You are not allowd to access this site!' if !logged_in?
-      completed_tasks = Task.where("end_time <= ?", Time.now).order('end_time DESC')
-      pending_tasks = Task.where("end_time > ?", Time.now).order('start_time ASC')
+      completed_tasks = @current_user.teams.map do |team|
+        team.tasks.where("end_time < ?", Time.now).order('start_time ASC').map do |task|
+          completed_tasks = {
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            start_time: task.start_time,
+            end_time: task.end_time,
+            team: task.team.name,
+            creator: task.creator.name
+          }
+        end
+      end
+      pending_tasks = @current_user.teams.map do |team|
+        team.tasks.where("end_time > ?", Time.now).order('start_time ASC').map do |task|
+          pending_tasks = {
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            start_time: task.start_time,
+            end_time: task.end_time,
+            team: task.team.name,
+            creator: task.creator.name
+          }
+        end
+      end
 
       render json: {
         status: 200,
@@ -196,6 +223,6 @@ class Api::TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title,:description,:start_time,:end_time)
+    params.require(:data).permit(:title,:description,:start_time,:end_time)
   end
 end

@@ -151,10 +151,10 @@ export default function PersistentDrawerLeft(props) {
   const classes = useStyles();
   const theme = useTheme();
   const loggedIn = useSelector(state => state.loggedIn);
+  const id = useSelector(state => state.id);
   const [open, setOpen] = React.useState(false);
   const [openBooks, setOpenBooks] = React.useState(false);
   const [openTeams, setOpenTeams] = React.useState(false);
-
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -221,95 +221,105 @@ export default function PersistentDrawerLeft(props) {
               <ListItemText primary="Home" />
             </ListItem>
           </Link>
-          <ListItem button onClick={handleTeamsOpen}>
-            <ListItemIcon>
-              <GroupIcon />
-            </ListItemIcon>
-            <ListItemText primary="Teams" />
-            {openTeams ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={openTeams} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link
-                to="/teams"
-                onClick={handleDrawerClose}
-                className={classes.link}
-              >
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <TocIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="All Teams" />
-                </ListItem>
-              </Link>
-              <Link
-                to="/teams/create"
-                onClick={handleDrawerClose}
-                className={classes.link}
-              >
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <AddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Create Team" />
-                </ListItem>
-              </Link>
-            </List>
-          </Collapse>
+          {loggedIn ? (
+            <div>
+              <ListItem button onClick={handleTeamsOpen}>
+                <ListItemIcon>
+                  <GroupIcon />
+                </ListItemIcon>
+                <ListItemText primary="Teams" />
+                {openTeams ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openTeams} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link
+                    to="/teams"
+                    onClick={handleDrawerClose}
+                    className={classes.link}
+                  >
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <TocIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="All Teams" />
+                    </ListItem>
+                  </Link>
+                  <Link
+                    to="/teams/create"
+                    onClick={handleDrawerClose}
+                    className={classes.link}
+                  >
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <AddIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Create Team" />
+                    </ListItem>
+                  </Link>
+                </List>
+              </Collapse>
 
-          <ListItem button onClick={handleBooksOpen}>
-            <ListItemIcon>
-              <BookIcon />
-            </ListItemIcon>
-            <ListItemText primary="Tasks" />
-            {openBooks ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={openBooks} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
+              <ListItem button onClick={handleBooksOpen}>
+                <ListItemIcon>
+                  <BookIcon />
+                </ListItemIcon>
+                <ListItemText primary="Tasks" />
+                {openBooks ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={openBooks} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link
+                    to="/timeline"
+                    onClick={handleDrawerClose}
+                    className={classes.link}
+                  >
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <StarBorder />
+                      </ListItemIcon>
+                      <ListItemText primary="My Day" />
+                    </ListItem>
+                  </Link>
+                  <Link
+                    to="/tasks"
+                    onClick={handleDrawerClose}
+                    className={classes.link}
+                  >
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <TocIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="All Tasks" />
+                    </ListItem>
+                  </Link>
+                  <Link
+                    to="/task/create"
+                    onClick={handleDrawerClose}
+                    className={classes.link}
+                  >
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <AddIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Create Task" />
+                    </ListItem>
+                  </Link>
+                </List>
+              </Collapse>
               <Link
-                to="/timeline"
+                to={`/user/${id}`}
                 onClick={handleDrawerClose}
                 className={classes.link}
               >
-                <ListItem button className={classes.nested}>
+                <ListItem button>
                   <ListItemIcon>
-                    <StarBorder />
+                    <PersonIcon />
                   </ListItemIcon>
-                  <ListItemText primary="My Day" />
+                  <ListItemText primary="Profile" />
                 </ListItem>
               </Link>
-              <Link
-                to="/tasks"
-                onClick={handleDrawerClose}
-                className={classes.link}
-              >
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <TocIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="All Tasks" />
-                </ListItem>
-              </Link>
-              <Link
-                to="/task/create"
-                onClick={handleDrawerClose}
-                className={classes.link}
-              >
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <AddIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Create Task" />
-                </ListItem>
-              </Link>
-            </List>
-          </Collapse>
-          <ListItem button>
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary="Profile" />
-          </ListItem>
+            </div>
+          ) : null}
         </List>
         <Divider />
         {loggedIn ? (
