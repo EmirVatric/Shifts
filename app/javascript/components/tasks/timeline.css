@@ -1,0 +1,20 @@
+.css-692fgp {
+  background: #4154B3 !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+  padding: 7px 10px !important;
+}
+
+.css-1b3lipl::before {
+  background: #4154B3 !important;
+}
+
+.css-vcfpfv {
+  background: #4154B3 !important;
+  border-radius: 50% !important;
+  outline: none !important;
+}
+
+.linkToTask {
+  display: block;
+}
