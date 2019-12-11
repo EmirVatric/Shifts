@@ -14,7 +14,7 @@
 }
 
 .wrapperTask {
-  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
-  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
-  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62) !important;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62);
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62);
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.62);
 }
