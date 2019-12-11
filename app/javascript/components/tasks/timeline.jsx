@@ -80,6 +80,7 @@ class TimelineTasks extends Component {
                 "en-US",
                 options
               )}`}
+              className="timeline"
               title={task.title}
             >
               {task.description}
