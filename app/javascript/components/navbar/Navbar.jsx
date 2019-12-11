@@ -7,7 +7,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -33,17 +32,12 @@ import TocIcon from "@material-ui/icons/Toc";
 import { loggedInStatus } from "../../actions/index";
 import { store } from "../../packs/Index";
 import Logo from "../../../assets/images/logo.png";
+import { del } from "../../utils/dataTransfer";
 
 const drawerWidth = 240;
 
 const logout = () => {
-  const url = "/api/logout";
-  fetch(url, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
+  del("/api/logout")
     .then(response => {
       if (response.ok) {
         return response.json();
