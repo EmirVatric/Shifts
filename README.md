@@ -12,10 +12,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* Node.js and npm installed on your development machine.
-* The Yarn package manager.
-* Ruby on Rails framework.
-* PostgreSQL
+- Node.js and npm installed on your development machine.
+- The Yarn package manager.
+- Ruby. (ruby 2.6.0)
+- Ruby on Rails framework.(Rails 5.1.7)
+- PostgreSQL.
 
 ### Installing
 
@@ -30,16 +31,19 @@ then you need to run the following commande to download all dependcies need to r
 ```
 yarn install
 ```
+
 and:
 
 ```
 bundle install
 ```
+
 final, you can run the application using :
 
-````
+```
 rails server
-````
+```
+
 Run the migrations:
 
 ```
@@ -47,6 +51,14 @@ rails db:migrate
 ```
 
 You can find the application running on localhost:3000
+
+## Running the tests
+
+For running the test in console type:
+
+```
+bundle exec rspec
+```
 
 ## Deployment
 
@@ -57,11 +69,13 @@ First step is to create heroku repository:
 ```
 heroku create
 ```
+
 Then run:
 
 ```
 git push heroku master
 ```
+
 Run the migrations:
 
 ```
@@ -70,9 +84,9 @@ heroku run rails db:migrate
 
 ## Built With
 
-* [Ruby on Rails](https://rubyonrails.org/) - Backend framework
-* [React](https://reactjs.org/) - Frontend library
+- [Ruby on Rails](https://rubyonrails.org/) - Backend framework
+- [React](https://reactjs.org/) - Frontend library
 
 ## Authors
 
-* **Emir Vatric** - [Portfolio](https://www.emirvatric.com/)
+- **Emir Vatric** - [Portfolio](https://www.emirvatric.com/)
