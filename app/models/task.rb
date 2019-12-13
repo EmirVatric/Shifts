@@ -19,16 +19,19 @@ class Task < ApplicationRecord
   end
 
   def time_difference
-    if self.start_time && self.end_time && self.start_time >= self.end_time
-      errors.add(:end_time, "must be greater than start time.")
-    end
+    if !self.start_time.nil?
+      if self.start_time >= self.end_time
+        errors.add(:end_time, "must be greater than start time.")
+      end
+    
 
-    if self.start_time && self.start_time < Date.today
-      errors.add(:start_time, "time cannot be in the past.")
-    end
+      if self.start_time && self.start_time < Date.today
+        errors.add(:start_time, "time cannot be in the past.")
+      end
 
-    if self.end_time - self.start_time > 28800
-      errors.add(:task_time, "cannot last longer than 8 hours.")
+      if self.end_time - self.start_time > 28800
+        errors.add(:task_time, "cannot last longer than 8 hours.")
+      end
     end
   end
 end
