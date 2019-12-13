@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::RegistrationsController < ApplicationController
   include CurrentUserConcern
   def create
@@ -15,32 +17,28 @@ class Api::RegistrationsController < ApplicationController
   end
 
   def profile
-    begin
-      unless logged_in?
-        render json: {
-          status: 401,
-          errors: 'You are not logged in'
-        }
-      end
-
+    unless logged_in?
       render json: {
-        name: @current_user.name,
-        tasks: @current_user.assigned_tasks,
-        teams: @current_user.teams
-      }
-
-    rescue StandardError => msg
-      render json: {
-        status: 500,
-        errors: msg
+        status: 401,
+        errors: 'You are not logged in'
       }
     end
 
+    render json: {
+      name: @current_user.name,
+      tasks: @current_user.assigned_tasks,
+      teams: @current_user.teams
+    }
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e
+    }
   end
 
   private
 
   def user_params
-    params.require(:registration).permit(:email,:password,:password_confirmation,:name)
+    params.require(:registration).permit(:email, :password, :password_confirmation, :name)
   end
 end

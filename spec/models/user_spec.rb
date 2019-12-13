@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   before :each do
     @user = User.create(name: 'test user', email: 'testuser@test.com', password: '123456')
   end
-
 
   describe '#email' do
     it 'validates for presence of email adress' do

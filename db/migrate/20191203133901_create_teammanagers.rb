@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateTeammanagers < ActiveRecord::Migration[5.1]
   def change
     create_table :teammanagers do |t|

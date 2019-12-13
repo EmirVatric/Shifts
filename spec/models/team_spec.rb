@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Team, type: :model do
@@ -22,7 +24,7 @@ RSpec.describe Team, type: :model do
     it 'validates for presence of team creator' do
       @user = User.create(name: 'test user', email: 'testuser@test.com', password: '123456')
       @team.valid?
-      expect(@team.errors[:team_creator]).to include("must exist")
+      expect(@team.errors[:team_creator]).to include('must exist')
 
       @team.team_creator = @user
       expect(@team.valid?).to eql(true)
@@ -41,5 +43,4 @@ RSpec.describe Team, type: :model do
       expect(@team.valid?).to eql(true)
     end
   end
-
 end
