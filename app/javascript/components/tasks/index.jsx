@@ -107,13 +107,7 @@ class Tasks extends Component {
                     >
                       {task.team}
                     </Typography>
-                    <Typography
-                      variant="h6"
-                      component="h6"
-                      className="text-center"
-                    >
-                      {task.title}
-                    </Typography>
+                    <h1 className="pageHeaderTeam">{task.title}</h1>
                     <Typography
                       component="h5"
                       variant="caption"

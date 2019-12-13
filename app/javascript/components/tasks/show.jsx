@@ -153,7 +153,7 @@ class ShowTask extends Component {
             <TocIcon className="singleTaskTimeAvarat" />
             <div className="singleTaskTitle">
               <div className="dateTimeHeader">Title</div>
-              {this.state.task.title}
+              <h1 className="pageHeaderTeam">{this.state.task.title}</h1>
             </div>
           </div>
           {this.props.name !== undefined &&

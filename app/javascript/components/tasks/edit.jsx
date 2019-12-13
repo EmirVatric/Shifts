@@ -134,9 +134,7 @@ class EditTask extends Component {
             <Avatar className="avatar">
               <EditIcon />
             </Avatar>
-            <Typography component="h5" variant="caption" noWrap>
-              * Please provide task informations!
-            </Typography>
+            <h1 className="pageHeader">* Please provide task informations!</h1>
             <form className="form" noValidate>
               <TextField
                 error={this.state.TitleErrors.length > 0 ? true : false}

@@ -77,9 +77,7 @@ class Login extends Component {
             <Avatar className="avatar">
               <LockOutlinedIcon />
             </Avatar>
-            <Typography component="h5" variant="caption" noWrap>
-              * Please login to move forward!
-            </Typography>
+            <h1 className="pageHeader">* Please login to move forward!</h1>
             <form className="form" noValidate>
               <TextField
                 error={this.state.error.length > 0 ? true : false}
