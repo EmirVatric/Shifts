@@ -13,3 +13,4 @@ files:
     - "Rakefile"
     - "node_modules/**/*"
     - "spec/**/*"
+    - "spec/rails_helper.rb"
