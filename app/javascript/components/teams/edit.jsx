@@ -104,9 +104,7 @@ class UpdateTeam extends Component {
             <Avatar className="avatar">
               <AddIcon />
             </Avatar>
-            <Typography component="h5" variant="caption" noWrap>
-              * Please provide team informations!
-            </Typography>
+            <h1 className="pageHeader">* Please provide team informations!</h1>
             <form className="form" noValidate>
               <TextField
                 error={this.state.NameErrors.length > 0 ? true : false}

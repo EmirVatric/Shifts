@@ -75,14 +75,7 @@ class ShowUser extends Component {
         {this.state.teams.map(team => (
           <Paper className="wrapperTask row mb-3" key={team.id}>
             <div className="col-12 pt-3 pb-3">
-              <Typography
-                variant="h6"
-                component="h6"
-                className="text-center"
-                noWrap
-              >
-                {team.name}
-              </Typography>
+              <h1 className="pageHeaderTeam">{team.name}</h1>
               <div className="teamMembers">
                 <div className="teamsDescription text-left">
                   <div className="creatorSubtext">Description:</div>

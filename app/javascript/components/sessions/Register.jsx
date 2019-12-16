@@ -95,9 +95,9 @@ class Signup extends Component {
             <Avatar className="avatar">
               <PersonIcon />
             </Avatar>
-            <Typography component="h5" variant="caption" noWrap>
+            <h1 className="pageHeader">
               * Please create account to move forward!
-            </Typography>
+            </h1>
             <form className="form" noValidate>
               <TextField
                 error={this.state.EmailErrors.length > 0 ? true : false}

@@ -80,9 +80,10 @@ class TimelineTasks extends Component {
                 "en-US",
                 options
               )}`}
+              className="timeline"
               title={task.title}
             >
-              {task.description}
+              <h1 className="pageHeader">{task.description}</h1>
               <Link
                 from="/timeline"
                 to={`/task/${task.id}`}

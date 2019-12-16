@@ -7,7 +7,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -33,17 +32,12 @@ import TocIcon from "@material-ui/icons/Toc";
 import { loggedInStatus } from "../../actions/index";
 import { store } from "../../packs/Index";
 import Logo from "../../../assets/images/logo.png";
+import { del } from "../../utils/dataTransfer";
 
 const drawerWidth = 240;
 
 const logout = () => {
-  const url = "/api/logout";
-  fetch(url, {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json"
-    }
-  })
+  del("/api/logout")
     .then(response => {
       if (response.ok) {
         return response.json();
@@ -231,13 +225,13 @@ export default function PersistentDrawerLeft(props) {
                 {openTeams ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
               <Collapse in={openTeams} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+                <List component="ul" disablePadding>
                   <Link
                     to="/teams"
                     onClick={handleDrawerClose}
                     className={classes.link}
                   >
-                    <ListItem button className={classes.nested}>
+                    <ListItem button component="li" className={classes.nested}>
                       <ListItemIcon>
                         <TocIcon />
                       </ListItemIcon>
@@ -249,7 +243,7 @@ export default function PersistentDrawerLeft(props) {
                     onClick={handleDrawerClose}
                     className={classes.link}
                   >
-                    <ListItem button className={classes.nested}>
+                    <ListItem button component="li" className={classes.nested}>
                       <ListItemIcon>
                         <AddIcon />
                       </ListItemIcon>
@@ -259,7 +253,7 @@ export default function PersistentDrawerLeft(props) {
                 </List>
               </Collapse>
 
-              <ListItem button onClick={handleBooksOpen}>
+              <ListItem component="li" button onClick={handleBooksOpen}>
                 <ListItemIcon>
                   <BookIcon />
                 </ListItemIcon>
@@ -273,7 +267,7 @@ export default function PersistentDrawerLeft(props) {
                     onClick={handleDrawerClose}
                     className={classes.link}
                   >
-                    <ListItem button className={classes.nested}>
+                    <ListItem button component="li" className={classes.nested}>
                       <ListItemIcon>
                         <StarBorder />
                       </ListItemIcon>
@@ -285,7 +279,7 @@ export default function PersistentDrawerLeft(props) {
                     onClick={handleDrawerClose}
                     className={classes.link}
                   >
-                    <ListItem button className={classes.nested}>
+                    <ListItem button component="li" className={classes.nested}>
                       <ListItemIcon>
                         <TocIcon />
                       </ListItemIcon>
@@ -297,7 +291,7 @@ export default function PersistentDrawerLeft(props) {
                     onClick={handleDrawerClose}
                     className={classes.link}
                   >
-                    <ListItem button className={classes.nested}>
+                    <ListItem button component="li" className={classes.nested}>
                       <ListItemIcon>
                         <AddIcon />
                       </ListItemIcon>
@@ -311,7 +305,7 @@ export default function PersistentDrawerLeft(props) {
                 onClick={handleDrawerClose}
                 className={classes.link}
               >
-                <ListItem button>
+                <ListItem component="li" button>
                   <ListItemIcon>
                     <PersonIcon />
                   </ListItemIcon>
@@ -329,7 +323,7 @@ export default function PersistentDrawerLeft(props) {
               onClick={handleDrawerClose}
               className={classes.link}
             >
-              <ListItem button>
+              <ListItem component="li" button>
                 <ListItemIcon>
                   <LockOpenIcon />
                 </ListItemIcon>
@@ -349,7 +343,7 @@ export default function PersistentDrawerLeft(props) {
               onClick={handleDrawerClose}
               className={classes.link}
             >
-              <ListItem button>
+              <ListItem component="li" button>
                 <ListItemIcon>
                   <LockOpenIcon />
                 </ListItemIcon>
@@ -361,7 +355,7 @@ export default function PersistentDrawerLeft(props) {
               onClick={handleDrawerClose}
               className={classes.link}
             >
-              <ListItem button>
+              <ListItem component="li" button>
                 <ListItemIcon>
                   <VpnKeyIcon />
                 </ListItemIcon>

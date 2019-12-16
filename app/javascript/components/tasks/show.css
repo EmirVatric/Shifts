@@ -1,8 +1,8 @@
 .singleTaskHeader {
   border-radius: 5px;
-  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
 }
 
 .singleTaskSubtextWrapper {
@@ -28,8 +28,8 @@
 
 .singleTaskTimeAvarat {
   color: #4154B3;
-  height: 35px !important;
-  width: 35px !important;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .dateTimeWrapperSingleTask {
@@ -83,9 +83,9 @@
   padding: 10px 10px;
   margin-top: 10px;
   border-radius: 5px;
-  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
 }
 
 .singleTaskDescriptionTitle {
@@ -102,9 +102,9 @@
   padding: 10px 10px;
   margin-top: 10px;
   border-radius: 5px;
-  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
   align-items: center;
 }
 
@@ -114,8 +114,8 @@
   padding: 10px 10px;
   margin-top: 10px;
   border-radius: 5px;
-  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
-  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30) !important;
+  -webkit-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  -moz-box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
+  box-shadow: -1px 4px 25px -12px rgba(0, 0, 0, 0.30);
   align-items: center;
 }

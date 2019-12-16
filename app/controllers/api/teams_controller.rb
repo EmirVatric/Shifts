@@ -1,195 +1,185 @@
+# frozen_string_literal: true
+
 class Api::TeamsController < ApplicationController
-  include CurrentUserConcern 
+  include CurrentUserConcern
 
   def userteams
-    begin 
-      raise 'You are not allowd to access this site!' if !logged_in?
-      teams = @current_user.teams
+    raise 'You are not allowd to access this site!' unless logged_in?
 
-      render json: {
-        status: 200,
-        teams: teams
-      }
-    rescue StandardError => msg
-      render json: {
-        status: 500,
-        errors: msg,
-        teams: []
-      }
-    end
+    teams = @current_user.teams
+
+    render json: {
+      status: 200,
+      teams: teams
+    }
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e,
+      teams: []
+    }
   end
 
-
   def create
-    begin 
-      raise 'You are not allowd to access this site!' if !logged_in?
-      team = Team.new(team_params)
-      team.team_creator= @current_user
+    raise 'You are not allowd to access this site!' unless logged_in?
 
-      if team.save
-        render json: {
-          status: :created,
-          team: team
-        }
-      else
-        render json: { 
-          status: 500,
-          errors: team.errors.full_messages 
-        }
-      end
-    rescue StandardError => msg
+    team = Team.new(team_params)
+    team.team_creator = @current_user
+
+    if team.save
+      render json: {
+        status: :created,
+        team: team
+      }
+    else
       render json: {
         status: 500,
-        errors: msg
+        errors: team.errors.full_messages
       }
     end
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e
+    }
   end
 
   def index
-    begin
-      
-      teams = Team.all.map do |team|
-        creator = team.team_creator
-        members = team.users.map {|user| user.name}
-        teams = {
-          id: team.id,
-          name: team.name,
-          description: team.description,
-          creator: creator.name,
-          members: members
-        }
-      end
-
-      render json: {
-        status: 200,
-        teams: teams
-      }
-    rescue StandardError => msg
-      render json: {
-        status: 500,
-        errors: msg,
-        temas: []
+    teams = Team.all.map do |team|
+      creator = team.team_creator
+      members = team.users.map(&:name)
+      teams = {
+        id: team.id,
+        name: team.name,
+        description: team.description,
+        creator: creator.name,
+        members: members
       }
     end
+
+    render json: {
+      status: 200,
+      teams: teams
+    }
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e,
+      temas: []
+    }
   end
 
   def join_team
-    begin
-      raise 'Please first loggin!' if !logged_in?
-      team = Team.find(params[:data])
+    raise 'Please first loggin!' unless logged_in?
 
-      @current_user.teams << team
+    team = Team.find(params[:data])
 
-      teams = Team.all.map do |team|
-        creator = team.team_creator
-        members = team.users.map {|user| user.name}
-        teams = {
-          id: team.id,
-          name: team.name,
-          description: team.description,
-          creator: creator.name,
-          members: members
-        }
-      end
+    @current_user.teams << team
 
-      render json: {
-        status: 200,
-        teams: teams
-      }
-    rescue StandardError => msg
-      render json: {
-        status: 500,
-        errors: msg,
-        temas: []
+    teams = Team.all.map do |t|
+      creator = t.team_creator
+      members = t.users.map(&:name)
+      teams = {
+        id: t.id,
+        name: t.name,
+        description: t.description,
+        creator: creator.name,
+        members: members
       }
     end
+
+    render json: {
+      status: 200,
+      teams: teams
+    }
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e,
+      temas: []
+    }
   end
 
   def leave_team
-    begin
-      raise 'Please first loggin!' if !logged_in?
-      team = Team.find(params[:data])
-      raise 'This team does not exists' if team.nil?
-      teammanager = Teammanager.where("user_id = ? AND team_id = ?", @current_user.id, team.id).first
-      raise 'You are not part of this team' if teammanager.nil?
-      teammanager.destroy
-      teams = Team.all.map do |team|
-        creator = team.team_creator
-        if team.users.size > 0
-          members = team.users.map {|user| user.name}
-        else
-          members = []
-        end
-        teams = {
-          id: team.id,
-          name: team.name,
-          description: team.description,
-          creator: creator.name,
-          members: members
-        }
-      end
+    raise 'Please first loggin!' unless logged_in?
 
-      render json: {
-        status: 200,
-        teams: teams
-      }
-      
+    team = Team.find(params[:data])
+    raise 'This team does not exists' if team.nil?
 
-    rescue StandardError => msg
-      render json: {
-        status: 500,
-        errors: msg,
-        temas: []
+    teammanager = Teammanager.where('user_id = ? AND team_id = ?', @current_user.id, team.id).first
+    raise 'You are not part of this team' if teammanager.nil?
+
+    teammanager.destroy
+    teams = Team.all.map do |t|
+      creator = t.team_creator
+      members = if !t.users.empty?
+                  t.users.map(&:name)
+                else
+                  []
+                end
+      teams = {
+        id: t.id,
+        name: t.name,
+        description: t.description,
+        creator: creator.name,
+        members: members
       }
     end
+
+    render json: {
+      status: 200,
+      teams: teams
+    }
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e,
+      temas: []
+    }
   end
 
   def update
-    begin
-      team = Team.find(params[:id])
-      raise 'You have to bee logged in to edit tasks!' if !logged_in?
-      raise 'You have to be creator of the task to edit it!' if team.team_creator != @current_user
+    team = Team.find(params[:id])
+    raise 'You have to bee logged in to edit tasks!' unless logged_in?
+    raise 'You have to be creator of the task to edit it!' if team.team_creator != @current_user
 
-      if team.update_attributes(team_params)
-        render json: {
-          status: 200
-        }
-      else
-        render json: { 
-          status: 500,
-          errors: team.errors.full_messages 
-        }
-      end
-    rescue StandardError => msg
+    if team.update_attributes(team_params)
+      render json: {
+        status: 200
+      }
+    else
       render json: {
         status: 500,
-        errors: msg
+        errors: team.errors.full_messages
       }
     end
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e
+    }
   end
 
   def destroy
-    begin
-      team = Team.find(params[:id])
-      raise 'You are not allowd to access this site!' if !logged_in?
-      raise 'You need to be task creator to preform this action' if @current_user != team.team_creator
+    team = Team.find(params[:id])
+    raise 'You are not allowd to access this site!' unless logged_in?
+    raise 'You need to be task creator to preform this action' if @current_user != team.team_creator
 
-      if team.destroy
-        render json: {
-          status: 200
-        }
-      end
-    rescue StandardError => msg
+    if team.destroy
       render json: {
-        status: 500,
-        errors: msg
+        status: 200
       }
     end
+  rescue StandardError => e
+    render json: {
+      status: 500,
+      errors: e
+    }
   end
 
+  private
 
-  private 
   def team_params
-    params.require(:data).permit(:name,:description)
+    params.require(:data).permit(:name, :description)
   end
 end
