@@ -36,6 +36,10 @@ class Home extends Component {
   render() {
     return (
       <div>
+        <div className="overlay">
+          THIS CONTENT IS MENT FOR MOBILE PHONES ONLY, PLEASE USE SMALL SCREEN
+          WIDTH (MAX: 500PX).
+        </div>
         <Paper className="w-100 homeHeaderWrapper mx-auto row">
           <div className="col-6 border-right text-center">
             <div className="homeHeaderSub">Teams:</div>
