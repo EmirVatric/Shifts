@@ -26,8 +26,7 @@
 
 @media only screen and (max-width: 500px) {
   .overlay {
-    height: 0;
-    width: 0;
+    display: none
   }
 }
 
