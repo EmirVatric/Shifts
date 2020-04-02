@@ -87,7 +87,7 @@ class ShowUser extends Component {
               className="addThisTaskToTimeline borderBottomRadius height w-100"
               onClick={e => this.leaveTeam(team.id)}
             >
-              Leave the Team
+              Leave The Team
               <RemoveIcon />
             </div>
           </Paper>
