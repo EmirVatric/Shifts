@@ -77,7 +77,8 @@ GEM
     parser (2.6.5.0)
       ast (~> 2.4.0)
     pg (1.1.4)
-    puma (3.12.4)
+    puma (4.3.9)
+      nio4r (~> 2.0)
     rack (2.2.2)
     rack-proxy (0.6.5)
       rack
@@ -189,7 +190,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
   pg (>= 0.18, < 2.0)
-  puma (~> 3.12)
+  puma (~> 4.3)
   rails (~> 5.1.7)
   rspec-rails
   rubocop
